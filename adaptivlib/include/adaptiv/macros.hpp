@@ -26,6 +26,8 @@
 #define ADAPTIV_TRAITS_NAMESPACE_BEGIN namespace traits {
 #define ADAPTIV_TRAITS_NAMESPACE_END }
 
+#define ADAPTIV_MATH_NAMESPACE_BEGIN namespace math {
+#define ADAPTIV_MATH_NAMESPACE_END }
 
 /// A C-style string with the current adaptiv version
 #define ADAPTIV_VERSION_STRING "adaptiv_0.1"

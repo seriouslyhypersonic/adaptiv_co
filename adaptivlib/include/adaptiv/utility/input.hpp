@@ -18,6 +18,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
@@ -27,6 +28,21 @@ namespace input {
 namespace qi = boost::spirit::qi;       // The parser library
 namespace ascii = boost::spirit::ascii;
 using ascii::space;                     // A space parser
+
+/// Number list grammar: a grammar for comma separated numbers
+template<class Iterator>
+struct NumberListParser
+        : qi::grammar<Iterator, std::vector<double>, ascii::space_type>
+{
+    NumberListParser(): NumberListParser::base_type(start_)
+    {
+        using qi::double_;
+
+        start_ = double_ % ',';
+    }
+
+    qi::rule<Iterator, std::vector<double>, ascii::space_type> start_;
+};
 
 template<class Iterator, class ResultContainer>
 bool parseNumberList(Iterator first, Iterator last, ResultContainer& container)

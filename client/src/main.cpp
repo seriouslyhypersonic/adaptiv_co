@@ -35,22 +35,22 @@ int main(int argc, char** argv)
 //    auto host = argv[1];
 //    auto port = argv[2];
 
-    input::LineParser parser(std::cin);
-
-    parser.getline("numbers?\n>");
-    if (!parser.startsWith("numbers")) return EXIT_FAILURE;
-    parser.popFront();
-
-    std::vector<double> numbers;
-    parser.parse(ParserType::NumberList, numbers);
-    print(numbers);
-
-    parser.getline("array?\n>");
-    if (!parser.startsWith("array")) return EXIT_FAILURE;
-    parser.popFront();
-
-    parser.parse(ParserType::NumberArray, numbers);
-    print(numbers);
+//    input::LineParser parser(std::cin);
+//
+//    parser.getline("numbers?\n>");
+//    if (!parser.startsWith("numbers")) return EXIT_FAILURE;
+//    parser.popFront();
+//
+//    std::vector<double> numbers;
+//    parser.parse(ParserType::NumberList, numbers);
+//    print(numbers);
+//
+//    parser.getline("array?\n>");
+//    if (!parser.startsWith("array")) return EXIT_FAILURE;
+//    parser.popFront();
+//
+//    parser.parse(ParserType::NumberArray, numbers);
+//    print(numbers);
 
     return EXIT_SUCCESS;
 }
