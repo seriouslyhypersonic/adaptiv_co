@@ -4,11 +4,13 @@
 #include <vector>
 
 #include <adaptiv/utility/input.hpp>
+#include <adaptiv/utility/output.hpp>
 
 #include <adaptiv/traits/traits.hpp>
 
 namespace traits = adaptiv::traits;
 namespace input = adaptiv::utility::input;
+namespace output = adaptiv::utility::output;
 using input::ParserType;
 
 template<class T>
@@ -49,13 +51,16 @@ int main(int argc, char** argv)
 //    }
 //    print(list);
 
+    std::cout << output::style::message <<
+        "Welcome to adaptiv" << output::style::none << '\n';
+
     parser.getline("array?\n>");
     std::vector<std::string> array;
     if (!parser.startsWith("array")) return EXIT_FAILURE;
     parser.popFront();
 
     if(!parser.parse(ParserType::Array, array)) {
-        std::cerr << parser.error() << '\n';
+        parser.fail();
     }
     print(array);
 

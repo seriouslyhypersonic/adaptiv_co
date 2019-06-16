@@ -19,6 +19,7 @@
 
 #include <adaptiv/macros.hpp>
 #include <adaptiv/traits/traits.hpp>
+#include <adaptiv/utility/output.hpp>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -97,7 +98,7 @@ struct ArrayParser:
         } else if constexpr (std::is_floating_point_v<T>) {
             start_ = qi::eps > '[' > *qi::double_ > ']';
         } else if constexpr (traits::is_basic_string_v<T>) {
-            quotedString_ = qi::lexeme['"' >> + (qi::char_ - '"') >> '"'];
+            quotedString_ = qi::lexeme['"' > + (qi::char_ - '"') > '"'];
             start_ = qi::eps > '[' > *quotedString_ > ']';
         } else {
             static_assert(
@@ -174,10 +175,13 @@ class LineParser
             classic::file_position_base<std::string> const& position =
                 exception.first.get_position();
             std::stringstream message;
-            message <<
+
+            namespace style = adaptiv::utility::output::style;
+            message << style::error << "error: " << style::none <<
                 "parse error at column " << position.column << "\n" <<
                 '\'' << exception.first.get_currentline() << "'\n" <<
-                std::string(position.column, '_') << "^___ here";
+                style::error <<
+                std::string(position.column, '~') << "^~~~ here";
             error_ = message.str();
             return false;
         }
@@ -297,6 +301,12 @@ public:
         return error_;
     }
 
+    /// Output error message to cerr
+    void fail() const
+    {
+        namespace style = adaptiv::utility::output::style;
+        std::cerr << style::error << error_ << style::none << '\n';
+    }
 };
 
 } //namespace input
