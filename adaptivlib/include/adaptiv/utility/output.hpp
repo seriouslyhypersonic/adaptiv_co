@@ -80,10 +80,10 @@ constexpr StyleRule message {Font::Bold, Fg::Blue,   Bg::Default};
 namespace detail {
 // Produce an ostream ref if T is an attribute (i.e. Font, Fg, or Bg)
 template<class T>
-using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Fg> ||
-                                       std::is_same_v<T, Bg> ||
-                                       std::is_same_v<T, Font>
-                                      ,std::ostream&>;
+using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Font> ||
+                                         std::is_same_v<T, Fg> ||
+                                         std::is_same_v<T, Bg>
+                                        ,std::ostream&>;
 
 char const* csi = "\033["; // control sequence introducer
 } // namespace detail
