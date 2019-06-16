@@ -9,7 +9,7 @@
 #ifndef ADAPTIV_NET_HPP
 #define ADAPTIV_NET_HPP
 
-// File: convenience header to access all networking functionality
+/// \file convenience header to access all networking functionality
 
 #include <adaptiv/macros.hpp>
 

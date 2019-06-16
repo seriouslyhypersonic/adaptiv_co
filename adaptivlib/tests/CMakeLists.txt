@@ -43,10 +43,14 @@ endif()
 # ---------------------------------------------------------------------------- #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 file(GLOB SRC_FILES ${SOURCE_DIR}/*.cpp)
-file(GLOB HEADER_FILES ${SOURCE_DIR}/*.hpp)
+file(GLOB HEADER_FILES ${INCLUDE_DIR}/*.hpp)
 
 add_executable(adaptivlib_tests ${SRC_FILES} ${HEADER_FILES})
+
+target_include_directories(adaptivlib_tests PUBLIC ${INCLUDE_DIR})
 
 target_link_libraries(adaptivlib_tests
         adaptivlib

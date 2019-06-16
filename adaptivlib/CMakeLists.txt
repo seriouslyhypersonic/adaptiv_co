@@ -12,7 +12,7 @@ find_package(Threads REQUIRED)
 
 # Source and include dirs
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(ADAPTIV_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/ include/adaptiv/math/random.hpp)
+set(ADAPTIV_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 # Source and header files
 file(GLOB SRC_FILES ${SOURCE_DIR}/*.cpp)

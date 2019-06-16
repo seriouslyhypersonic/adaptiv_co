@@ -10,6 +10,7 @@
 
 #include <type_traits>
 #include <random>
+#include <stdexcept>
 
 #include <adaptiv/macros.hpp>
 
@@ -17,10 +18,15 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_MATH_NAMESPACE_BEGIN
 
 template<class Arithmetic>
-Arithmetic random(Arithmetic min = 0, Arithmetic max = 1)
+Arithmetic random(Arithmetic min = 0, Arithmetic max = 1) noexcept(false)
 {
     static_assert(std::is_arithmetic_v<Arithmetic>,
             "[adaptiv::math::random] requires an arithmetic type");
+
+    if (max <= min) {
+        throw std::runtime_error(
+            "[adaptiv::math::random] max must be greater than min");
+    }
 
     static std::random_device randomDevice;
     static std::mt19937 rng(randomDevice());
