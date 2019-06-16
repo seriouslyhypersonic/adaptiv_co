@@ -75,10 +75,9 @@ constexpr StyleRule warning {Font::Bold, Fg::Yellow, Bg::Default};
 constexpr StyleRule error   {Font::Bold, Fg::Red,    Bg::Default};
 constexpr StyleRule success {Font::Bold, Fg::Green,  Bg::Default};
 constexpr StyleRule message {Font::Bold, Fg::Blue,   Bg::Default};
-}
+} // namespace style
 
-namespace detail
-{
+namespace detail {
 // Produce an ostream ref if T is an attribute (i.e. Font, Fg, or Bg)
 template<class T>
 using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Fg> ||
@@ -87,7 +86,7 @@ using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Fg> ||
                                       ,std::ostream&>;
 
 char const* csi = "\033["; ///< control sequence introducer
-}
+} // namespace detail
 
 /// Overload of operator<< for attributes
 template<class T>
