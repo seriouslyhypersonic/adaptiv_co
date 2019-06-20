@@ -16,9 +16,11 @@
 #include <boost/property_tree/json_parser.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
+ADAPTIV_SERIALIZATION_NAMESPACE_BEGIN
 
 namespace property_tree = boost::property_tree;
 
+ADAPTIV_SERIALIZATION_NAMESPACE_END
 ADAPTIV_NAMESPACE_END
 
 #endif //PROPERTY_TREE_HPP

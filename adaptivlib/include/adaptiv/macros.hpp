@@ -8,17 +8,31 @@
 #ifndef ADAPTIV_MACROS_HPP
 #define ADAPTIV_MACROS_HPP
 
+// [namespaces] ----------------------------------------------------------------
+
 #define ADAPTIV_NAMESPACE_BEGIN namespace adaptiv {
 #define ADAPTIV_NAMESPACE_END }
 
 #define ADAPTIV_CLOUD_NAMESPACE_BEGIN namespace cloud {
 #define ADAPTIV_CLOUD_NAMESPACE_END }
 
+#define ADAPTIV_CLIENT_NAMESPACE_BEGIN namespace client {
+#define ADAPTIV_CLIENT_NAMESPACE_END }
+
+#define ADAPTIV_PROTOCOL_NAMESPACE_BEGIN namespace protocol {
+#define ADAPTIV_PROTOCOL_NAMESPACE_END }
+
 #define ADAPTIV_SERVER_NAMESPACE_BEGIN namespace server {
 #define ADAPTIV_SERVER_NAMESPACE_END }
 
-#define ADAPTIV_CLIENT_NAMESPACE_BEGIN namespace client {
-#define ADAPTIV_CLIENT_NAMESPACE_END }
+#define ADAPTIV_MATH_NAMESPACE_BEGIN namespace math {
+#define ADAPTIV_MATH_NAMESPACE_END }
+
+#define ADAPTIV_NET_NAMESPACE_BEGIN namespace net {
+#define ADAPTIV_NET_NAMESPACE_END }
+
+#define ADAPTIV_SERIALIZATION_NAMESPACE_BEGIN namespace serialization {
+#define ADAPTIV_SERIALIZATION_NAMESPACE_END }
 
 #define ADAPTIV_UTILITY_NAMESPACE_BEGIN namespace utility {
 #define ADAPTIV_UTILITY_NAMESPACE_END }
@@ -26,11 +40,12 @@
 #define ADAPTIV_TRAITS_NAMESPACE_BEGIN namespace traits {
 #define ADAPTIV_TRAITS_NAMESPACE_END }
 
-#define ADAPTIV_MATH_NAMESPACE_BEGIN namespace math {
-#define ADAPTIV_MATH_NAMESPACE_END }
+// [version] -------------------------------------------------------------------
 
 /// A C-style string with the current adaptiv version
 #define ADAPTIV_VERSION_STRING "adaptiv_0.1"
+
+// [debugging] -----------------------------------------------------------------
 
 #if defined(NDEBUG) || defined(SILENT_DEBUG)
 /// When in release, this macro does not generate code

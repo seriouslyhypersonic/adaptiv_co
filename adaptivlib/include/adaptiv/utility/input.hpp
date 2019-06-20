@@ -268,10 +268,12 @@ public:
     }
 
     /// Remove first word from the loaded data
-    void popFront()
+    std::string popFront()
     {
+        auto front = firstWord();
         boost::erase_first(data_, firstWord());
         boost::trim_left(data_);
+        return front;
     }
 
     /// Prompt input showing an optional message prepended and get the line data

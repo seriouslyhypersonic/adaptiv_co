@@ -216,10 +216,11 @@ void doWebSocketSession(
     auto ec = session->accept(request, yield);
     if (ec) return fail(ec, "websocket accept");
 
-    bool hasConnection = true;
+    // Send welcome message
+    session->welcome(yield);
 
-    while (hasConnection) {
-        session->read(hasConnection, yield);
+    while (session->hasConnection()) {
+        session->run(yield);
     }
 }
 
@@ -243,7 +244,7 @@ void doHttpSession(
         beast::http::request<beast::http::string_body> request;
         beast::http::async_read(stream, buffer, request, yield[ec]);
         if (ec == beast::http::error::end_of_stream) break; // They closed
-        if (ec) return fail(ec, "read");
+        if (ec) return fail(ec, "run");
 
         // --- WebSocket (check if it is an upgrade)
         if (beast::websocket::is_upgrade(request)) {
@@ -296,7 +297,7 @@ void doHttpSession(
     // At this point the connection close gracefully
 }
 
-} // namespace detail
+} // namespace external
 
 void doListen(
     net::io_context& context,

@@ -18,9 +18,14 @@ set(ADAPTIV_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 file(GLOB SRC_FILES ${SOURCE_DIR}/*.cpp)
 file(GLOB HEADER_FILES ${ADAPTIV_INCLUDE_DIR}/adaptiv/*.hpp)
 
+# External libraries
+set(EXTERNAL_CEREAL_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/adaptiv/serialization/external)
+
 add_library(adaptivlib STATIC ${SRC_FILES} ${ADAPTIV_INCLUDE_DIRS})
 
-target_include_directories(adaptivlib PUBLIC ${ADAPTIV_INCLUDE_DIRS})
+target_include_directories(adaptivlib PUBLIC ${ADAPTIV_INCLUDE_DIRS}
+            ${EXTERNAL_CEREAL_DIRS})
 
 target_link_libraries(adaptivlib
         Threads::Threads

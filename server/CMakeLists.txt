@@ -26,5 +26,5 @@ target_include_directories(server PUBLIC ${INCLUDE_DIR})
 target_link_libraries(server
         adaptivlib
         Threads::Threads
-        #boost_coroutine         # Seems to be required (gcc 7.4.0)
+        boost_coroutine         # Seems to be required (gcc 7.4.0)
         ${Boost_LIBRARIES})

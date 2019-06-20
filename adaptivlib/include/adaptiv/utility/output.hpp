@@ -86,7 +86,7 @@ using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Font> ||
                                         ,std::ostream&>;
 
 char const* csi = "\033["; // control sequence introducer
-} // namespace detail
+} // namespace external
 
 /// Overload of operator<< for attributes
 template<class T>

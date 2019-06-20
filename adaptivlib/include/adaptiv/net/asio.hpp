@@ -14,14 +14,12 @@
 #include <boost/asio/spawn.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
-
-namespace net {
+ADAPTIV_NET_NAMESPACE_BEGIN
 
 using namespace boost::asio; // From <boost/asio.hpp>
 using tcp  = ip::tcp;        // From <boost/asio/web/tcp.hpp>
 
-} // namespace net
-
+ADAPTIV_NET_NAMESPACE_END
 ADAPTIV_NAMESPACE_END
 
 #endif //ADAPTIV_ASIO_HPP

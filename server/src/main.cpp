@@ -5,6 +5,7 @@
 #include <adaptiv/net/net.hpp>
 
 #include "server.hpp"
+#include "solver.hpp"
 
 namespace server = adaptiv::cloud::server;
 namespace net = adaptiv::net;
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
             server::doListen(
                 context,
                 net::tcp::endpoint{address, port},
-                server::SharedState::makeShared(documentRoot),
+                server::SharedState::makeShared(context, documentRoot),
                 yield);
         }
     );
