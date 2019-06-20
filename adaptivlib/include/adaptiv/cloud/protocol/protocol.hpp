@@ -5,11 +5,11 @@
  * Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  */
-#include <adaptiv/cloud/protocol/request.hpp>
-#include <adaptiv/cloud/protocol/response.hpp>
-
 #ifndef ADAPTIV_PROTOCOL_HPP
 #define ADAPTIV_PROTOCOL_HPP
+
+#include <adaptiv/cloud/protocol/request.hpp>
+#include <adaptiv/cloud/protocol/response.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN

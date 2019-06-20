@@ -10,7 +10,7 @@
 
 // File: convenience header to access all cloud computing functionality
 
-#include <adaptiv/macros.hpp>
+#include <adaptiv/cloud/protocol/protocol.hpp>
 #include <adaptiv/net/net.hpp>
 
 #endif //ADAPTIVE_CLOUD_HPP
