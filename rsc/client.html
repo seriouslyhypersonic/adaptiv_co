@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>adaptiv cloud solver</title>
+</head>
+<style>
+img { display: block; }
+</style>
+
+<body>
+  <img src="adaptiv_logo.png" style="margin-top:25px;height:100px;" alt="adaptiv logo">
+  <h1>adaptiv cloud solver</h1>
+  
+  Server URI: <input class="draw-border" id="uri" size="47" value="ws://localhost:8080" style="margin-bottom: 5px;">
+  <button class="echo-button" id="connect">Connect</button>
+  <button class="echo-button" id="disconnect">Disconnect</button><br>
+  <button class="echo-button" id="solve">Solve</button><br>
+
+  <pre id="messages" style="width: 600px; height: 300px; border: solid 1px #cccccc; margin-bottom: 5px; overflow:auto"></pre>
+
+  <div style="margin-bottom: 5px;">
+    Message<br>
+    <input class="draw-border" id="sendMessage" size="74" value="">
+    <button class="echo-button" id="send">Send</button>
+  </div>
+  <script>
+    var ws = null;
+    
+    connect.onclick = function() {
+      ws = new WebSocket(uri.value);
+      ws.onopen = function(ev) {
+        messages.innerText += "[connection opened]\n";
+      };
+      ws.onclose = function(ev) {
+        messages.innerText += "[connection closed]\n";
+      };
+      ws.onmessage = function(ev) {
+        messages.innerText += ev.data + "\n";
+        messages.scrollTop = messages.scrollHeight;
+      };
+      ws.onerror = function(ev) {
+        messages.innerText += "[error]\n";
+        console.log(ev);
+      };
+    };
+    disconnect.onclick = function() {
+      ws.close();
+    };
+    solve.onclick = function() {
+        ws.send("solve");
+    }
+    send.onclick = function() {
+      ws.send(sendMessage.value);
+      sendMessage.value = "";
+    };
+    sendMessage.onkeyup = function(ev) {
+      ev.preventDefault();
+      if (event.keyCode === 13) {
+        send.click();
+      }
+    }
+  </script>
+</body>
+</html>

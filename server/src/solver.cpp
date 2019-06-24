@@ -5,8 +5,12 @@
  * Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  */
-#include "solver.hpp"
+#include <string>
 
+#include <adaptiv/cloud/protocol/response.hpp>
+#include <adaptiv/cloud/protocol/targets/rans.hpp>
+
+#include "solver.hpp"
 #include "shared_state.hpp"
 
 ADAPTIV_NAMESPACE_BEGIN
@@ -23,14 +27,38 @@ void RANS::update()
 
     if (iteration_ == 1) return;
 
-    residuals_.momentum_.x_ = random(Residuals::min, Residuals::max);
-    residuals_.momentum_.y_ = random(Residuals::min, Residuals::max);
-    residuals_.momentum_.z_ = random(Residuals::min, Residuals::max);
-    residuals_.energy_      = random(Residuals::min, Residuals::max);
-    residuals_.tke_         = random(Residuals::min, Residuals::max);
-    residuals_.tdr_         = random(Residuals::min, Residuals::max);
+    residuals_.momentum.x = random(Residuals::min, Residuals::max);
+    residuals_.momentum.y = random(Residuals::min, Residuals::max);
+    residuals_.momentum.z = random(Residuals::min, Residuals::max);
+    residuals_.energy     = random(Residuals::min, Residuals::max);
+    residuals_.tke        = random(Residuals::min, Residuals::max);
+    residuals_.tdr        = random(Residuals::min, Residuals::max);
 
     std::this_thread::sleep_for(iterationTime_); // Simulate runtime
+}
+
+std::string RANS::response()
+{
+    protocol::RANSResponse result {
+        iteration_,
+        {   // Residuals
+            {   // Momentum
+                residuals_.momentum.x,
+                residuals_.momentum.y,
+                residuals_.momentum.z
+            },
+            residuals_.energy,
+            residuals_.tke,
+            residuals_.tdr
+        },
+        // Busy
+        iteration_ < maxIterations_,
+        // Error
+        ""
+    };
+
+    cloud::protocol::Response response("solve", result);
+    return response.json();
 }
 
 RANS::RANS(
@@ -48,18 +76,11 @@ void RANS::run()
     while (iteration_ < maxIterations_) {
         update();
 
-        // Prepare iteration payload
-        std::ostringstream msg;
-        msg <<
-            "{iteration: " << std::setw(5) << iteration_ <<
-            ", residuals: " << residuals_ <<
-            "}";
-
         // Push payload to the queue of each active session
-        state_->enqueue(msg.str());
-        ADAPTIV_DEBUG_CERR(msg.str());
+        state_->enqueue(response());
+        ADAPTIV_DEBUG_CERR(response());
     }
-    state_->enqueue("{result:solverFinished}");
+//    state_->enqueue("{result:solverFinished}");
     state_->isBusy(false);
 }
 

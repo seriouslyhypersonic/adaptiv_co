@@ -44,6 +44,7 @@ struct SolveParams
     }
 };
 
+struct NoResponseError { };
 struct SolveResult
 {
     std::size_t iteration;
@@ -108,6 +109,10 @@ TEST(Protocol, Response)
     double const momX = 0.32, momY = 3.14, momZ = 1.41;
     SolveResult result {iterations, {momX, momY, momZ}, ""};
     protocol::Response outResp("solve", result);
+
+    // Test traits
+    ASSERT_FALSE(protocol::traits::has_response_error_v<NoResponseError>);
+    ASSERT_TRUE(protocol::traits::has_response_error_v<SolveResult>);
 
     // Simulate sending
     std::istringstream in(outResp.json());

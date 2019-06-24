@@ -21,7 +21,7 @@ ADAPTIV_PROTOCOL_NAMESPACE_BEGIN
  * type.
  * @param networkExchange A JSON serialized NetworkExchange
  */
-std::string target(std::string const& networkExchange)
+inline std::string target(std::string const& networkExchange)
 {
     rapidjson::Document document;
 

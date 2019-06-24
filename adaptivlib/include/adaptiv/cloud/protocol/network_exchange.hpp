@@ -31,12 +31,28 @@ bool constexpr is_json_serializable_v =
         ,cereal::traits::is_output_serializable<T, cereal::JSONOutputArchive>>;
 } // namespace traits
 
+/// Static assertion: assert type \c T is JSON serializable
+#define ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(T)                      \
+static_assert(                                                      \
+    traits::is_json_serializable_v<T>,                              \
+    "[adaptiv::cloud::protocol::NetworkExchange] "                  \
+    "a request/response NetworkMessage must be JSON serializable")  \
+
 /**
  * The base class for an adaptiv client-server network exchange
- * @tparam Message A JSON serializable type holding the message to exchange
- * when sending a request/response;
+ * @tparam NetworkMessage A JSON serializable type holding the message to
+ * exchange when sending a request/response;
+ * @note To ensure your NetworkMessage models the JSON serializable concept,
+ * add serialization methods using one of cereal's facilities. E.g.
+ * @code
+ *     template<class Archive>
+ *     void serialize(Archive& archive)
+ *     {
+ *          archive(member1, member2, ...);
+ *     }
+ * @endcode
  */
-template<class Message>
+template<class NetworkMessage>
 class NetworkExchange
 {
 public:
@@ -45,20 +61,18 @@ public:
      * @param target The target of the exchange
      * @param message The message sent to or received from the \c target
      */
-    NetworkExchange(std::string target, Message const& message)
+    NetworkExchange(std::string target, NetworkMessage const& message)
     : target_(std::move(target))
     , message_(message)
     {
-        static_assert(
-            traits::is_json_serializable_v<Message>,
-            "[adaptiv::cloud::protocol::NetworkExchange] "
-            "a request/response message must be JSON serializable");
+        ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
     }
 
     /// Reconstruct a NetworkExchange from received data
     explicit NetworkExchange(std::istream& request)
     {
-        NetworkExchange temp("", Message{});
+        ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
+        NetworkExchange temp("", NetworkMessage{});
         {
             // Load the data into temp
             cereal::JSONInputArchive iarchive(request);
@@ -77,7 +91,7 @@ public:
     }
 
     std::string const& target()  const noexcept { return target_; }
-    Message     const& message() const noexcept { return message_; };
+    NetworkMessage     const& message() const noexcept { return message_; };
 
 protected:
     /** The serialized NetworkExchange in JSON format
@@ -94,7 +108,7 @@ protected:
     }
 
     std::string target_;
-    Message     message_;
+    NetworkMessage     message_;
 };
 
 ADAPTIV_PROTOCOL_NAMESPACE_END

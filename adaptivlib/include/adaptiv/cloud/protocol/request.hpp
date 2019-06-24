@@ -14,9 +14,22 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN
 ADAPTIV_PROTOCOL_NAMESPACE_BEGIN
 
-/// An adaptiv request
-template<class Message>
-class Request: public NetworkExchange<Message>
+/**
+ * An adaptiv client-server network Request
+ * @tparam NetworkMessage A JSON serializable type holding the message to
+ * exchange int the Request.
+ * @note To ensure your NetworkMessage models the JSON serializable concept,
+ * add serialization methods using one of cereal's facilities. E.g.
+ * @code
+ *     template<class Archive>
+ *     void serialize(Archive& archive)
+ *     {
+ *          archive(member1, member2, ...);
+ *     }
+ * @endcode
+ */
+template<class NetworkMessage>
+class Request: public NetworkExchange<NetworkMessage>
 {
 public:
     /**
@@ -24,26 +37,26 @@ public:
      * @param target The target of the request
      * @param message The message (i.e. params) sent to the request \c target
      */
-    Request(std::string const& target, Message const& message)
-    : NetworkExchange<Message>::NetworkExchange(target, message)
+    Request(std::string const& target, NetworkMessage const& message)
+    : NetworkExchange<NetworkMessage>::NetworkExchange(target, message)
     { /* Invoke the base constructor to enable template type deduction */ }
 
     /// Reconstruct a Request from received data
     explicit Request(std::istream& request)
-    : NetworkExchange<Message>::NetworkExchange(request)
+    : NetworkExchange<NetworkMessage>::NetworkExchange(request)
     { }
 
     /// Make the Request serializable
     template<class Archive>
     void serialize(Archive& archive)
     {
-        archive(cereal::base_class<NetworkExchange<Message>>(this));
+        archive(cereal::base_class<NetworkExchange<NetworkMessage>>(this));
     }
 
     /// The serialized Request in JSON format
     std::string json()
     {
-        return NetworkExchange<Message>::json("request");
+        return NetworkExchange<NetworkMessage>::json("request");
     }
 };
 

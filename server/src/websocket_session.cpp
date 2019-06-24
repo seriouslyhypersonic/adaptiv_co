@@ -113,7 +113,10 @@ void WebSocketSession::flush(boost::asio::yield_context yield)
     error_code ec;
     while (!tempQueue.empty()) {
         websocket_.async_write(net::buffer(*tempQueue.front()), yield[ec]);
-        if (ec) return fail(ec, "websocket flush");
+        if (ec) {
+            hasConnection_ = false;
+            return fail(ec, "websocket flush");
+        }
 
         // Remove what we just sent
         tempQueue.pop();
@@ -166,6 +169,11 @@ void WebSocketSession::run(boost::asio::yield_context yield)
             // Only start flushing if previous writes have been completed
             // and if there is actually something in the queue
             flush(yield);
+
+            // todo: use flush return value to break this loop
+            if (!hasConnection()) {
+                break;
+            }
         }
     }
 

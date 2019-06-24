@@ -17,6 +17,7 @@
 
 #include <adaptiv/macros.hpp>
 #include <adaptiv/math/random.hpp>
+#include <adaptiv/cloud/protocol/response.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN
@@ -47,33 +48,34 @@ private:
 
         struct Momentum
         {
-            double x_, y_, z_;
-        } momentum_;
+            double x, y, z;
+        } momentum;
 
-        double energy_;
-        double tke_;
-        double tdr_;
+        double energy;
+        double tke;
+        double tdr;
 
         friend
         std::ostream& operator<<(std::ostream& out, Residuals const& residuals)
         {
             return out <<
-                       "{momX: "    << std::setw(10) << residuals.momentum_.x_ <<
-                       ", momY: "   << std::setw(10) << residuals.momentum_.y_ <<
-                       ", momZ: "   << std::setw(10) << residuals.momentum_.z_ <<
-                       ", energy: " << std::setw(10) << residuals.energy_ <<
-                       ", tke: "    << std::setw(10) << residuals.tke_ <<
-                       ", tdr: "    << std::setw(10) << residuals.tdr_ <<
+                       "{momX: "    << std::setw(10) << residuals.momentum.x <<
+                       ", momY: "   << std::setw(10) << residuals.momentum.y <<
+                       ", momZ: "   << std::setw(10) << residuals.momentum.z <<
+                       ", energy: " << std::setw(10) << residuals.energy <<
+                       ", tke: "    << std::setw(10) << residuals.tke <<
+                       ", tdr: "    << std::setw(10) << residuals.tdr <<
                        "}";
         }
     } residuals_;
 
     void update();
+    std::string response();
 
 public:
     explicit RANS(
         SharedState* state,
-        std::size_t maxIterations = 32,
+        std::size_t maxIterations = 500,
         miliseconds_t iterationTime = 500ms);
 
     /**
