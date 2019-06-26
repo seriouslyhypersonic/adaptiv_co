@@ -4,7 +4,7 @@ project(client_coro)
 set(CMAKE_CXX_STANDARD  17)
 
 # Boost
-find_package(Boost REQUIRED COMPONENTS system REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system coroutine REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 #add_definitions(-DBOOST_ASIO_ENABLE_HANDLER_TRACKING)
 
@@ -26,4 +26,5 @@ target_include_directories(client PUBLIC ${INCLUDE_DIR})
 target_link_libraries(client
         adaptivlib
         Threads::Threads
+        boost_coroutine         # Seems to be required (gcc 7.4.0)
         ${Boost_LIBRARIES})

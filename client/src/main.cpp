@@ -7,6 +7,7 @@
 
 #include "config.hpp"
 #include "parser.hpp"
+#include "rpc_solve.hpp"
 
 namespace traits = adaptiv::traits;
 namespace input = adaptiv::utility::input;
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
         auto command = parser.popFront();
 
         if (command == "solve") {
-            std::cout << "solving\n";
+            client::doSolve(host, port);
         } else if (command == "help") {
             client::doHelp();
         }else if (command == "parser") {
