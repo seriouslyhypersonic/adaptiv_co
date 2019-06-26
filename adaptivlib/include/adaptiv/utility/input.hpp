@@ -178,7 +178,7 @@ class LineParser
 
             namespace style = adaptiv::utility::output::style;
             message << style::error << "error: " << style::none <<
-                "parse error at column " << position.column << "\n" <<
+                "parse error on column " << position.column << "\n" <<
                 '\'' << exception.first.get_currentline() << "'\n" <<
                 style::error <<
                 std::string(position.column, '~') << "^~~~ here";

@@ -48,15 +48,24 @@ inline void welcomeMessage()
 }
 
 /// Display help menu
-inline void help()
+inline void doHelp()
 {
     std::cout <<
         "List of commands\n" <<
         "     ping  - ping adaptiv server\n"
         "     solve - start solution process\n"
+        "    parser - test parsers\n"
         "   details - connection details\n"
         "     help  - show this menu\n"
-        "     quit  - close client\n";
+        "     exit  - close client\n";
+}
+
+/// Display connection details
+inline void details(char const* host, char const* port)
+{
+    std::cout <<
+              "connect to: " << host << '\n' <<
+              "      port: " << port << '\n';
 }
 
 } // namespace client

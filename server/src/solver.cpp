@@ -8,7 +8,7 @@
 #include <string>
 
 #include <adaptiv/cloud/protocol/response.hpp>
-#include <adaptiv/cloud/protocol/targets/rans.hpp>
+#include <adaptiv/cloud/protocol/messages/rans.hpp>
 
 #include "solver.hpp"
 #include "shared_state.hpp"

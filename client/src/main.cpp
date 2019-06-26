@@ -6,6 +6,7 @@
 #include <adaptiv/utility/input.hpp>
 
 #include "config.hpp"
+#include "parser.hpp"
 
 namespace traits = adaptiv::traits;
 namespace input = adaptiv::utility::input;
@@ -46,7 +47,11 @@ int main(int argc, char** argv)
         if (command == "solve") {
             std::cout << "solving\n";
         } else if (command == "help") {
-
+            client::doHelp();
+        }else if (command == "parser") {
+            client::doParser();
+        } else if (command == "details") {
+            client::details(host, port);
         } else if (command == "exit") {
             break;
         } else {

@@ -70,11 +70,11 @@ struct StyleRule
 
 /// Some predefined output styles
 namespace style {
-constexpr StyleRule none    { };
-constexpr StyleRule warning {Font::Bold, Fg::Yellow, Bg::Default};
-constexpr StyleRule error   {Font::Bold, Fg::Red,    Bg::Default};
-constexpr StyleRule success {Font::Bold, Fg::Green,  Bg::Default};
-constexpr StyleRule message {Font::Bold, Fg::Blue,   Bg::Default};
+constexpr StyleRule none    {Font::Regular, Fg::Default, Bg::Default};
+constexpr StyleRule warning {Font::Bold,    Fg::Yellow,  Bg::Default};
+constexpr StyleRule error   {Font::Bold,    Fg::Red,     Bg::Default};
+constexpr StyleRule success {Font::Bold,    Fg::Green,   Bg::Default};
+constexpr StyleRule message {Font::Bold,    Fg::Blue,    Bg::Default};
 } // namespace style
 
 namespace detail {
@@ -85,7 +85,7 @@ using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Font> ||
                                          std::is_same_v<T, Bg>
                                         ,std::ostream&>;
 
-char const* csi = "\033["; // control sequence introducer
+char const* const csi = "\033["; // control sequence introducer
 } // namespace external
 
 /// Overload of operator<< for attributes
