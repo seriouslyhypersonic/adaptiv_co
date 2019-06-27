@@ -21,12 +21,14 @@ namespace client {
 namespace net = adaptiv::net;
 namespace protocol = adaptiv::cloud::protocol;
 
+/// Remote procedure calls
+namespace rpc {
 /// Call target solve on the server
-void rpcSolve(
-    std::string const& host,
-    std::string const& port);
+void solve(std::string const& host, std::string const& port);
+} // namespace rpc
 
-void doSolve(std::string const& host, std::string const& port);
+/// Calls target solve on the server and monitors the solution process
+void solve(std::string const& host, std::string const& port);
 
 } // namespace client
 

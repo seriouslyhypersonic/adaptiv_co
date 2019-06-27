@@ -6,9 +6,9 @@
 #include <adaptiv/utility/input.hpp>
 
 #include "config.hpp"
-#include "parser.hpp"
-#include "rpc_solve.hpp"
-#include "rpc_ping.hpp"
+#include "parsers.hpp"
+#include "solve.hpp"
+#include "ping.hpp"
 
 namespace traits = adaptiv::traits;
 namespace input = adaptiv::utility::input;
@@ -47,13 +47,13 @@ int main(int argc, char** argv)
         auto command = parser.popFront();
 
         if (command == "ping") {
-            client::doPing(host, port);
+            client::ping(host, port);
         } else if (command == "solve") {
-            client::doSolve(host, port);
+            client::solve(host, port);
         } else if (command == "help") {
-            client::doHelp();
-        }else if (command == "parser") {
-            client::doParser();
+            client::help();
+        }else if (command == "parsers") {
+            client::parsers();
         } else if (command == "details") {
             client::details(host, port);
         } else if (command == "exit") {

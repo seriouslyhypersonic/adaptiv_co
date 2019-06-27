@@ -15,13 +15,14 @@
 #include <adaptiv/cloud/protocol/response.hpp>
 #include <adaptiv/cloud/protocol/messages/rans.hpp>
 
-#include "rpc_solve.hpp"
+#include "solve.hpp"
+#include "ping.hpp"
 
 namespace net = adaptiv::net;
 namespace beast = adaptiv::beast;
 namespace protocol = adaptiv::cloud::protocol;
 
-// Output the result with headers
+// Helper: output the result with headers
 void printIteration(
     protocol::RANSResponse const& response,
     std::size_t headerSpacing)
@@ -34,10 +35,7 @@ void printIteration(
     std::cout << response;
 }
 
-/// Call target solve on the server
-void client::rpcSolve(
-    std::string const& host,
-    std::string const& port)
+void client::rpc::solve(std::string const& host, std::string const& port)
 {
     beast::error_code ec;
 
@@ -82,36 +80,31 @@ void client::rpcSolve(
     ws.handshake(host, "/", ec);
     if(ec) adaptiv::except(ec, "handshake");
 
+    // Read the status
+    auto status = rpc::ping(ws);
+    std::cout << status << '\n';
+
     // Send the message // todo: implement solve request using NetworkExchange
-    std::string solveRequest = "solve";
-    ws.write(net::buffer(solveRequest), ec);
-    if(ec) adaptiv::except(ec, "write");
-
-    // This buffer will hold the incoming message
-    beast::flat_buffer buffer;
-
-    // Read a message into our buffer
-    ws.read(buffer, ec);
-    if(ec) adaptiv::except(ec, "read");
-
-    // Print welcome message
-    std::cout << beast::make_printable(buffer.data()) << std::endl;
+    if (!status.busy) {
+        std::string solveRequest = "solve";
+        ws.write(net::buffer(solveRequest), ec);
+        if(ec) adaptiv::except(ec, "write");
+    }
 
     bool busy = false;
     do {
         // Read rans response
-        beast::flat_buffer msgBuffer;
-        ws.read(msgBuffer, ec);
+        beast::flat_buffer buffer;
+        ws.read(buffer, ec);
         if (ec) adaptiv::except(ec, "read response");
 
-        std::istringstream in(beast::buffers_to_string(msgBuffer.data()));
+        std::istringstream in(beast::buffers_to_string(buffer.data()));
 
         protocol::Response<protocol::RANSResponse> response(in);
         printIteration(response.message(), 5);
 
         busy = response.message().busy;
     } while (busy);
-
 
     // Close the WebSocket connection
     ws.close(beast::websocket::close_code::normal, ec);
@@ -120,12 +113,10 @@ void client::rpcSolve(
     // If we get here then the connection is closed gracefully
 }
 
-void client::doSolve(
-    std::string const& host,
-    std::string const& port)
+void client::solve(std::string const& host, std::string const& port)
 {
     try {
-        rpcSolve(host, port);
+        rpc::solve(host, port);
     } catch (std::exception const& exception) {
         adaptiv::fail(exception.what());
     }

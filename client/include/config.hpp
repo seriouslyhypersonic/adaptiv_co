@@ -48,7 +48,7 @@ inline void welcomeMessage()
 }
 
 /// Display help menu
-inline void doHelp()
+inline void help()
 {
     std::cout <<
         "List of commands\n" <<

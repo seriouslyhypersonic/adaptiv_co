@@ -68,7 +68,7 @@ public:
         ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
     }
 
-    /// Reconstruct a NetworkExchange from received data
+    /// Reconstruct a NetworkExchange from received data todo: from std::string
     explicit NetworkExchange(std::istream& request)
     {
         ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
@@ -108,7 +108,7 @@ protected:
     }
 
     std::string target_;
-    NetworkMessage     message_;
+    NetworkMessage message_;
 };
 
 ADAPTIV_PROTOCOL_NAMESPACE_END

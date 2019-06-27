@@ -23,7 +23,7 @@ void print(T const& ts)
     std::cout << '\n';
 }
 
-inline void doParser()
+inline void parsers()
 {
     namespace input = adaptiv::utility::input;
 

@@ -14,15 +14,31 @@
 
 #include <adaptiv/definitions.hpp>
 
-#include "rpc_ping.hpp"
+#include "ping.hpp"
 
 namespace net = adaptiv::net;
-namespace beast = adaptiv::beast;
 
-/// Ping the server
-client::protocol::responses::ServerStatus client::rpcPing(
-    std::string const& host,
-    std::string const& port)
+client::protocol::responses::ServerStatus
+client::rpc::ping(beast::websocket::stream<beast::tcp_stream>& websocket
+)
+{
+    beast::error_code ec;
+
+    // This buffer will hold the incoming message
+    beast::flat_buffer buffer;
+
+    // Read a message into our buffer
+    websocket.read(buffer, ec);
+    if(ec) adaptiv::except(ec, "read");
+
+    std::istringstream in(beast::buffers_to_string(buffer.data()));
+    protocol::Response<protocol::responses::ServerStatus> response(in);
+
+    return response.message();
+}
+
+client::protocol::responses::ServerStatus
+client::rpc::ping(std::string const& host, std::string const& port)
 {
     adaptiv::error_code ec;
 
@@ -66,28 +82,19 @@ client::protocol::responses::ServerStatus client::rpcPing(
     ws.handshake(host, "/", ec);
     if(ec) adaptiv::except(ec, "handshake");
 
-    // This buffer will hold the incoming message
-    beast::flat_buffer buffer;
-
-    // Read a message into our buffer
-    ws.read(buffer, ec);
-    if(ec) adaptiv::except(ec, "read");
+    auto status = ping(ws);
 
 //    // Close the WebSocket connection
 //    ws.close(beast::websocket::close_code::normal);
 //    if(ec) adaptiv::except(ec, "close");
 
-    std::istringstream in(beast::buffers_to_string(buffer.data()));
-    protocol::Response<protocol::responses::ServerStatus> response(in);
-
-    return response.message();
+    return status;
 }
 
-
-void client::doPing(std::string const& host, std::string const& port)
+void client::ping(std::string const& host, std::string const& port)
 {
     try {
-        auto status = rpcPing(host, port);
+        auto status = rpc::ping(host, port);
         auto largew = std::setw(2*adaptiv::def::output::fieldw);
         auto hline = std::string(2*adaptiv::def::output::fieldw, '-');
         std::cout <<
