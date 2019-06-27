@@ -80,9 +80,8 @@ void client::rpc::solve(std::string const& host, std::string const& port)
     ws.handshake(host, "/", ec);
     if(ec) adaptiv::except(ec, "handshake");
 
-    // Read the status
+    // Check the server status
     auto status = rpc::ping(ws);
-    std::cout << status << '\n';
 
     // Send the message // todo: implement solve request using NetworkExchange
     if (!status.busy) {
