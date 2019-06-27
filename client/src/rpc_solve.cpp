@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <cstddef>
+#include <stdexcept>
 
 #include <adaptiv/net/net.hpp>
 #include <adaptiv/cloud/protocol/response.hpp>
@@ -35,27 +36,28 @@ void printIteration(
 
 /// Call target solve on the server
 void client::rpcSolve(
-        std::string const& host,
-        std::string const& port,
-        net::io_context& context,
-        net::yield_context yield)
+    std::string const& host,
+    std::string const& port)
 {
-    adaptiv::error_code ec;
+    beast::error_code ec;
+
+    // The io_context is required for all I/O
+    net::io_context context;
 
     // These objects perform our I/O
     net::tcp::resolver resolver(context);
     beast::websocket::stream<beast::tcp_stream> ws(context);
 
     // Look up the domain name
-    auto const results = resolver.async_resolve(host, port, yield[ec]);
-    if(ec) return adaptiv::fail(ec, "resolve");
+    auto const results = resolver.resolve(host, port, ec);
+    if(ec) adaptiv::except(ec, "resolve");
 
     // Set a timeout on the operation
     beast::get_lowest_layer(ws).expires_after(std::chrono::seconds(30));
 
     // Make the connection on the IP address we get from a lookup
-    beast::get_lowest_layer(ws).async_connect(results, yield[ec]);
-    if(ec) return adaptiv::fail(ec, "connect");
+    beast::get_lowest_layer(ws).connect(results, ec);
+    if(ec) adaptiv::except(ec, "connect");
 
     // Turn off the timeout on the tcp_stream, because
     // the websocket stream has its own timeout system.
@@ -77,20 +79,20 @@ void client::rpcSolve(
 
 
     // Perform the websocket handshake
-    ws.async_handshake(host, "/", yield[ec]);
-    if(ec) return adaptiv::fail(ec, "handshake");
+    ws.handshake(host, "/", ec);
+    if(ec) adaptiv::except(ec, "handshake");
 
-    // Send the message
+    // Send the message // todo: implement solve request using NetworkExchange
     std::string solveRequest = "solve";
-    ws.async_write(net::buffer(solveRequest), yield[ec]);
-    if(ec) return adaptiv::fail(ec, "write");
+    ws.write(net::buffer(solveRequest), ec);
+    if(ec) adaptiv::except(ec, "write");
 
     // This buffer will hold the incoming message
     beast::flat_buffer buffer;
 
     // Read a message into our buffer
-    ws.async_read(buffer, yield[ec]);
-    if(ec) return adaptiv::fail(ec, "read");
+    ws.read(buffer, ec);
+    if(ec) adaptiv::except(ec, "read");
 
     // Print welcome message
     std::cout << beast::make_printable(buffer.data()) << std::endl;
@@ -99,8 +101,8 @@ void client::rpcSolve(
     do {
         // Read rans response
         beast::flat_buffer msgBuffer;
-        ws.async_read(msgBuffer, yield[ec]);
-        if (ec) return adaptiv::fail(ec, "read response");
+        ws.read(msgBuffer, ec);
+        if (ec) adaptiv::except(ec, "read response");
 
         std::istringstream in(beast::buffers_to_string(msgBuffer.data()));
 
@@ -112,8 +114,8 @@ void client::rpcSolve(
 
 
     // Close the WebSocket connection
-    ws.async_close(beast::websocket::close_code::normal, yield[ec]);
-    if(ec) return adaptiv::fail(ec, "close");
+    ws.close(beast::websocket::close_code::normal, ec);
+    if(ec) adaptiv::except(ec, "close");
 
     // If we get here then the connection is closed gracefully
 }
@@ -122,16 +124,10 @@ void client::doSolve(
     std::string const& host,
     std::string const& port)
 {
-    // The io_context is required for all I/O
-    net::io_context context;
+    try {
+        rpcSolve(host, port);
+    } catch (std::exception const& exception) {
+        adaptiv::fail(exception.what());
+    }
 
-    // Launch the asynchronous operation
-    net::spawn(
-        context,
-        [&context, &host, &port](net::yield_context yield)
-        {
-            rpcSolve(host, port, context, yield);
-        });
-
-    context.run();
 }

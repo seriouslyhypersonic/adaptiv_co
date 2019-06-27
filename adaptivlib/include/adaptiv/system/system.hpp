@@ -19,7 +19,7 @@
 
 ADAPTIV_NAMESPACE_BEGIN
 
-using error_code = boost::system::error_code;
+using error_code = boost::system::error_code; // todo: use beast::error_code?
 
 /// Report a failure on std::cerr
 inline void fail(std::string const& message)
@@ -40,6 +40,7 @@ inline void fail(error_code ec, char const* what)
 }
 
 /**
+ * todo: rename to throw_
  * Throw a runtime_error
  * @param ec the system error_code that generated the failure
  * @param what additional label to prepend to the error_code message

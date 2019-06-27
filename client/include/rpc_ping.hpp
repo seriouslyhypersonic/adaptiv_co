@@ -17,7 +17,7 @@ namespace protocol = adaptiv::cloud::protocol;
 /// Ping the server
 protocol::responses::ServerStatus rpcPing(
     std::string const& host,
-    std::string const& port) noexcept(false);
+    std::string const& port);
 
 void doPing(std::string const& host, std::string const& port);
 

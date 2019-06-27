@@ -22,7 +22,7 @@ namespace beast = adaptiv::beast;
 /// Ping the server
 client::protocol::responses::ServerStatus client::rpcPing(
     std::string const& host,
-    std::string const& port) noexcept(false)
+    std::string const& port)
 {
     adaptiv::error_code ec;
 

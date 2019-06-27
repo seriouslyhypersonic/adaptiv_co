@@ -23,10 +23,8 @@ namespace protocol = adaptiv::cloud::protocol;
 
 /// Call target solve on the server
 void rpcSolve(
-        std::string const& host,
-        std::string const& port,
-        net::io_context& context,
-        net::yield_context yield);
+    std::string const& host,
+    std::string const& port);
 
 void doSolve(std::string const& host, std::string const& port);
 
