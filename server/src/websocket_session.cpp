@@ -13,6 +13,9 @@
 #include <sstream>
 #include <algorithm>
 
+#include <adaptiv/cloud/protocol/response.hpp>
+#include <adaptiv/cloud/protocol/messages/server_status.hpp>
+
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN
 ADAPTIV_SERVER_NAMESPACE_BEGIN
@@ -77,10 +80,16 @@ std::queue<std::shared_ptr<std::string const>> WebSocketSession::queueCopy()
 
 void WebSocketSession::welcome(boost::asio::yield_context yield)
 {
-    std::stringstream msg;
-    msg << "{busy:" << std::boolalpha << state_->isBusy() << "}";
+    protocol::responses::ServerStatus status{
+        state_->isBusy(),
+        state_->isBusy()? "rans" : "",  // Active target
+        ""                              // No errors for now
+    };
+    protocol::Response response("status", status);
 
-    message(msg.str(), yield);
+    ADAPTIV_DEBUG_CERR(response.json());
+
+    message(response.json(), yield);
 }
 
 void WebSocketSession::write(boost::asio::yield_context yield)

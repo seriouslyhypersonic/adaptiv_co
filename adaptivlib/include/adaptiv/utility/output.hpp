@@ -96,7 +96,7 @@ detail::ostreamRefIfAtt<T> operator<<(std::ostream& out, T const& attribute)
 }
 
 /// Overload of operator<< for a StyleRule
-std::ostream& operator<<(std::ostream& out, StyleRule const& rule)
+inline std::ostream& operator<<(std::ostream& out, StyleRule const& rule)
 {
     return out << detail::csi <<
         static_cast<int>(rule.font) << ';' <<

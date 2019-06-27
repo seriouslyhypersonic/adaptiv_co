@@ -8,6 +8,7 @@
 #include "config.hpp"
 #include "parser.hpp"
 #include "rpc_solve.hpp"
+#include "rpc_ping.hpp"
 
 namespace traits = adaptiv::traits;
 namespace input = adaptiv::utility::input;
@@ -45,7 +46,9 @@ int main(int argc, char** argv)
         parser.getline(">");
         auto command = parser.popFront();
 
-        if (command == "solve") {
+        if (command == "ping") {
+            client::doPing(host, port);
+        } else if (command == "solve") {
             client::doSolve(host, port);
         } else if (command == "help") {
             client::doHelp();
@@ -59,30 +62,6 @@ int main(int argc, char** argv)
             std::cerr << "error: invalid command '" << command << "'\n";
         }
     }
-
-//
-//    parser.getline("list?\n>");
-//    if (!parser.startsWith("list")) return EXIT_FAILURE;
-//    parser.popFront();
-//
-//    std::vector<int> list;
-//    bool success = parser.parse(ParserType::List, list);
-//    if (!success) {
-//        std::cerr << parser.error() << '\n';
-//        return EXIT_FAILURE;
-//    }
-//    print(list);
-//
-//
-//    parser.getline("array?\n>");
-//    std::vector<std::string> array;
-//    if (!parser.startsWith("array")) return EXIT_FAILURE;
-//    parser.popFront();
-//
-//    if(!parser.parse(ParserType::Array, array)) {
-//        parser.fail();
-//    }
-//    print(array);
 
     return EXIT_SUCCESS;
 }

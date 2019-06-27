@@ -10,14 +10,23 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 #include <adaptiv/macros.hpp>
+#include <adaptiv/utility/output.hpp>
 
 #include <boost/system/system_error.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 
 using error_code = boost::system::error_code;
+
+/// Report a failure on std::cerr
+inline void fail(std::string const& message)
+{
+    namespace style = adaptiv::utility::output::style;
+    std::cerr << style::error << message << style::none  <<"\n";
+}
 
 /**
  * Report a failure on std::cerr
@@ -26,7 +35,18 @@ using error_code = boost::system::error_code;
  */
 inline void fail(error_code ec, char const* what)
 {
-    std::cerr << what << ": " << ec.message() << "\n";
+
+    return fail(std::string(what) + ": " + ec.message());
+}
+
+/**
+ * Throw a runtime_error
+ * @param ec the system error_code that generated the failure
+ * @param what additional label to prepend to the error_code message
+ */
+inline void except(error_code ec, char const* what) noexcept(false)
+{
+    throw std::runtime_error(std::string(what) + ": " + ec.message());
 }
 
 ADAPTIV_NAMESPACE_END
