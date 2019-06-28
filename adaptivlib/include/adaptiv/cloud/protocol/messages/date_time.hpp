@@ -27,7 +27,6 @@ struct DateTime
     std::string time;
     std::string error;
 
-    /// Make the DateTime request serializable
     ADAPTIV_SERIALIZE(date, time, error);
 };
 } // namespace request

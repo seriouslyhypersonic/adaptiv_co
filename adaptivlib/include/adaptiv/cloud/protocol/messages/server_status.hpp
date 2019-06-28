@@ -13,6 +13,7 @@
 
 #include <adaptiv/macros.hpp>
 #include <adaptiv/serialization/external/cereal/archives/json.hpp>
+#include <adaptiv/serialization/macros.hpp>
 #include <adaptiv/definitions.hpp>
 #include <adaptiv/utility/output.hpp>
 
@@ -25,18 +26,11 @@ namespace responses {
 /// Indicates the server status, also used as a welcome message to clients
 struct ServerStatus
 {
-    bool busy;
+    bool        busy;
     std::string activeTarget;
     std::string error;
 
-    template<class Archive>
-    void serialize(Archive& archive)
-    {
-        archive(
-            CEREAL_NVP(busy),
-            CEREAL_NVP(activeTarget),
-            CEREAL_NVP(error));
-    }
+    ADAPTIV_SERIALIZE(busy, activeTarget, error);
 
     friend std::ostream& operator<<(
         std::ostream& out,
