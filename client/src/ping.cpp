@@ -31,7 +31,7 @@ client::rpc::ping(beast::websocket::stream<beast::tcp_stream>& websocket
     websocket.read(buffer, ec);
     if(ec) adaptiv::except(ec, "read");
 
-    std::istringstream in(beast::buffers_to_string(buffer.data()));
+    auto in = beast::buffers_to_string(buffer.data());
     protocol::Response<protocol::responses::ServerStatus> response(in);
 
     return response.message();

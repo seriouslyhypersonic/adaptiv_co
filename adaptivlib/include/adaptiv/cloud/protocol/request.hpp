@@ -42,7 +42,7 @@ public:
     { /* Invoke the base constructor to enable template type deduction */ }
 
     /// Reconstruct a Request from received data
-    explicit Request(std::istream& request)
+    explicit Request(std::string const& request)
     : NetworkExchange<NetworkMessage>::NetworkExchange(request)
     { }
 

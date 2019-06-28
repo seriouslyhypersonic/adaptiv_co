@@ -68,14 +68,17 @@ public:
         ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
     }
 
-    /// Reconstruct a NetworkExchange from received data todo: from std::string
-    explicit NetworkExchange(std::istream& request)
+    /// Reconstruct a NetworkExchange from received data
+    explicit NetworkExchange(std::string const& request)
     {
         ADAPTIV_ASSERT_IS_JSON_SERIALIZABLE(NetworkMessage);
         NetworkExchange temp("", NetworkMessage{});
         {
+            // todo: non-copying stream?
+            std::istringstream in(request);
+
             // Load the data into temp
-            cereal::JSONInputArchive iarchive(request);
+            cereal::JSONInputArchive iarchive(in);
             iarchive(temp);
         }
         *this = temp;

@@ -85,15 +85,15 @@ TEST(Protocol, Request)
     // Test output serialization
     SolveParams params{solver, maxIterations, numbers};
     protocol::Request outReq("solve", params);
-
+    
     // Simulate sending...
-    std::istringstream in(outReq.json());
+    auto in = outReq.json();
 
     // When receiving, first get the target, so we can provide the right
     // Message type to reconstruct the Request
-    ASSERT_EQ(protocol::target(in.str()), "solve");
+    ASSERT_EQ(protocol::target(in), "solve");
 
-    protocol::Request<SolveParams> inReq(in);
+    protocol::Request<SolveParams> inReq(outReq.json());
 
     // Check the reconstruction was successful
     ASSERT_EQ(outReq.message().solver, inReq.message().solver);
@@ -114,12 +114,12 @@ TEST(Protocol, Response)
     ASSERT_FALSE(protocol::traits::has_response_error_v<NoResponseError>);
     ASSERT_TRUE(protocol::traits::has_response_error_v<SolveResult>);
 
-    // Simulate sending
-    std::istringstream in(outResp.json());
-
+    // Simulate sending...
+    auto in = outResp.json();
+    
     // When receiving, first get the target, so we can provide the right
     // Message type to reconstruct the Response
-    ASSERT_EQ(protocol::target(in.str()), "solve");
+    ASSERT_EQ(protocol::target(in), "solve");
 
     protocol::Response<SolveResult> inResp(in);
 

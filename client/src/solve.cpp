@@ -97,7 +97,7 @@ void client::rpc::solve(std::string const& host, std::string const& port)
         ws.read(buffer, ec);
         if (ec) adaptiv::except(ec, "read response");
 
-        std::istringstream in(beast::buffers_to_string(buffer.data()));
+        auto in = beast::buffers_to_string(buffer.data());
 
         protocol::Response<protocol::RANSResponse> response(in);
         printIteration(response.message(), 5);

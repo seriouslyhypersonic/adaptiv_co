@@ -68,7 +68,7 @@ public:
     }
 
     /// Reconstruct a Response from received data
-    explicit Response(std::istream& request)
+    explicit Response(std::string const& request)
     : NetworkExchange<NetworkMessage>::NetworkExchange(request)
     {
         ADAPTIV_ASSERT_HAS_RESPONSE_ERROR(NetworkMessage);
