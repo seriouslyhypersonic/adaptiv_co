@@ -17,7 +17,7 @@
  * @note Make class members serializable using cereal's facilities.
  * @details This macro adds the simple serialization method bellow and
  * registers its arguments (i.e. the class members) for archival.
- * The class members are archived using its variable name as the identifier.
+ * The class members are archived using their variable name as the identifier.
  * @code
  *     template<class Archive>
  *     void serialize(Archive& archive)
