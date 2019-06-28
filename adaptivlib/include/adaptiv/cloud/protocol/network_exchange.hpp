@@ -18,6 +18,7 @@
 #include <adaptiv/macros.hpp>
 #include <adaptiv/serialization/external/cereal/details/traits.hpp>
 #include <adaptiv/serialization/external/cereal/archives/json.hpp>
+#include <adaptiv/serialization/macros.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN

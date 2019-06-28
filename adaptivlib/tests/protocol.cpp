@@ -13,6 +13,8 @@
 #include <adaptiv/serialization/external/cereal/types/vector.hpp>
 #include <adaptiv/serialization/external/cereal/types/memory.hpp>
 
+#include <adaptiv/cloud/protocol/messages/date_time.hpp>
+
 #include <tests/testing.hpp>
 
 namespace protocol = adaptiv::cloud::protocol;

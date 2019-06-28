@@ -16,6 +16,7 @@
 #include <adaptiv/macros.hpp>
 #include <adaptiv/serialization/external/cereal/details/traits.hpp>
 #include <adaptiv/serialization/external/cereal/archives/json.hpp>
+#include <adaptiv/serialization/macros.hpp>
 #include <adaptiv/math/format.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
@@ -33,48 +34,23 @@ struct RANSResponse
         {
             double x, y, z;
 
-            /// Make momentum residuals serializable
-            template<class Archive>
-            void serialize(Archive& archive)
-            {
-                archive(
-                CEREAL_NVP(x),
-                CEREAL_NVP(y),
-                CEREAL_NVP(z));
-            }
-
+            // Make the components of the momentum residuals serializable
+            ADAPTIV_SERIALIZE(x, y, z);
         } momentum;
 
         double energy;
         double tke;
         double tdr;
 
-        /// Make residuals serializable
-        template<class Archive>
-        void serialize(Archive& archive)
-        {
-            archive(
-            CEREAL_NVP(momentum),
-            CEREAL_NVP(energy),
-            CEREAL_NVP(tke),
-            CEREAL_NVP(tdr));
-        }
+        // Make all residuals serializable
+        ADAPTIV_SERIALIZE(momentum, energy, tke, tdr);
     } residuals;
 
-    bool busy;
-
+    bool        busy;
     std::string error;
 
-    /// Make the response serializable
-    template<class Archive>
-    void serialize(Archive& archive)
-    {
-        archive(
-        CEREAL_NVP(iteration),
-        CEREAL_NVP(residuals),
-        CEREAL_NVP(busy),
-        CEREAL_NVP(error));
-    }
+    // Make the response serializable
+    ADAPTIV_SERIALIZE(iteration, residuals, busy, error);
 
     static std::string& header()
     {

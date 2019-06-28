@@ -5,8 +5,8 @@
  * Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  */
-#ifndef SERVERSTATUS_HPP
-#define SERVERSTATUS_HPP
+#ifndef ADAPTIV_SERVER_STATUS_HPP
+#define ADAPTIV_SERVER_STATUS_HPP
 
 #include <iostream>
 
@@ -73,4 +73,4 @@ ADAPTIV_PROTOCOL_NAMESPACE_END
 ADAPTIV_CLOUD_NAMESPACE_END
 ADAPTIV_NET_NAMESPACE_END
 
-#endif //SERVERSTATUS_HPP
+#endif //ADAPTIV_SERVER_STATUS_HPP
