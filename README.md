@@ -8,7 +8,7 @@
 1. Run the server executable by providing: 
     * address - host ip address
     * port - service port number
-    * path - the root for the server resources
+    * path - root path for the server resources
 
 Example
 ```console
@@ -25,6 +25,11 @@ galaxy@faraway: ~$ ./client chandrila-coruscantcore.com
 ```
 
 3. Alternatively, use the webclient by accessing host:port on a browser.
+
+Example
+```html
+http://chandrila-coruscantcore.com:8080
+```
 
 ##
 <p align="right">
