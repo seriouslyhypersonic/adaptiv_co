@@ -33,7 +33,5 @@ http://chandrila-coruscantcore.com:8080
 
 ##
 <p align="right">
-    <a ref="https://tecnico.ulisboa.pt/en/">
-        <img src="./doc/IST_logo.png" height="100" alt="IST-logo">
-    </a>
+    <img src="./doc/IST_logo.png" height="100" alt="IST-logo">
 </p>
