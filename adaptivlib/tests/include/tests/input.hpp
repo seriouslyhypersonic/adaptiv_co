@@ -38,7 +38,7 @@ std::vector<Arithmetic> randomVector(
 template<class T>
 std::string makeList(
     std::vector<T> const& elems,
-    std::string const& separator)
+    std::string const& separator = ",")
 {
     static_assert(std::is_arithmetic_v<T>,
         "[makeList] requires an arithmetic type");
@@ -86,6 +86,22 @@ std::string makeArray(std::vector<std::string> const& elems)
 {
     auto array = makeList(elems, " ");
     return "[" + array + "]";
+}
+
+/**
+ * The greatest lower bound type for a zero or symmetrically bounded interval
+ * @param val The interval max
+ * @return 0 if \c T is \c unsigned, otherwise \c -val
+ */
+template<class T>
+T constexpr infimum(T val)
+{
+    static_assert(std::is_arithmetic_v<T>, "T must be an arithmetic type");
+    if constexpr (std::is_unsigned_v<T>) {
+        return static_cast<T>(0);
+    } else {
+        return -val;
+    }
 }
 
 #endif //ADAPTIV_TEST_INPUT_HPP

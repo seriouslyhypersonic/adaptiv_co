@@ -2,6 +2,7 @@
 #include <string>
 #include <cstddef>
 #include <limits>
+#include <type_traits>
 
 #include <adaptiv/utility/input.hpp>
 #include <adaptiv/math/random.hpp>
@@ -12,13 +13,18 @@
 namespace input = adaptiv::utility::input;
 
 // Test settings
-int const size         =  100;
-long const intMin      = -1'000'000'000'000;
-long const intMax      =  1'000'000'000'000;
-double const doubleMin = -1e12;
-double const doubleMax =  1e12;
-double const absError  =  0.001;
-
+int                const size         =  100;
+float              const floatMax     = 10000;
+double             const doubleMax    =  1e12;
+short              const shortMax     = std::numeric_limits<short>::max();
+unsigned short     const ushortMax    = std::numeric_limits<short>::max();
+int                const intMax       = std::numeric_limits<int>::max();
+unsigned int       const uintMax      = std::numeric_limits<int>::max();
+long               const longMax      = std::numeric_limits<long>::max();
+unsigned long      const ulongMax     = std::numeric_limits<long>::max();
+long long          const longlongMax  = std::numeric_limits<long long>::max();
+unsigned long long const ulonglongMax = std::numeric_limits<unsigned long long>::max();
+float              const absError     = 0.001;
 
 #define STRING_VECTOR                                         \
 std::vector<std::string>{                                     \
@@ -32,6 +38,44 @@ std::vector<std::string>{                                     \
 }                                                             \
 
 using iterator_type = std::string::iterator;
+
+#define ADAPTIV_MAKE_LIST_TEST(type, alias)                              \
+    bool alias##IsParsed = false;                                         \
+    auto alias##s =                                                      \
+        randomVector<type>(size, infimum(alias##Max), alias##Max);       \
+    auto alias##List = makeList(alias##s, ", ");                         \
+    auto const alias##Parser =                                           \
+        input::experimental::parsers::makeListParser<type, false>();     \
+    std::vector<type> alias##sParsed;                                    \
+    alias##sParsed.reserve(size);                                        \
+    alias##IsParsed = boost::spirit::x3::phrase_parse(                   \
+        alias##List.begin(),                                             \
+        alias##List.end(),                                               \
+        alias##Parser,                                                   \
+        boost::spirit::x3::ascii::space,                                 \
+        alias##sParsed);                                                 \
+    ASSERT_TRUE(alias##IsParsed);                                        \
+    if constexpr (std::is_floating_point_v<type>) {                      \
+        ADAPTIV_ASSERT_ELEMENTS_NEAR(alias##sParsed, alias##s, absError);\
+    } else {                                                             \
+        ADAPTIV_ASSERT_ELEMENTS_EQ(alias##sParsed, alias##s);            \
+    } do { break; } while (true)                                         \
+                                                                         \
+
+/// Test the list grammar and all numeric x3_parsers
+TEST(Input, X3ListParser)
+{
+    ADAPTIV_MAKE_LIST_TEST(             float, float);
+    ADAPTIV_MAKE_LIST_TEST(            double, double);
+    ADAPTIV_MAKE_LIST_TEST(             short, short);
+    ADAPTIV_MAKE_LIST_TEST(    unsigned short, ushort);
+    ADAPTIV_MAKE_LIST_TEST(      unsigned int, uint);
+    ADAPTIV_MAKE_LIST_TEST(               int, int);
+    ADAPTIV_MAKE_LIST_TEST(              long, long);
+    ADAPTIV_MAKE_LIST_TEST(     unsigned long, ulong);
+    ADAPTIV_MAKE_LIST_TEST(         long long, longlong);
+    ADAPTIV_MAKE_LIST_TEST(unsigned long long, ulonglong);
+}
 
 /// Test the list grammar
 TEST(Input, ListParser)
@@ -60,7 +104,7 @@ TEST(Input, ListParser)
 
     // Parse integers ----------------------------------------------------------
     auto longs =
-        randomVector<long>(size, intMin, intMax);
+        randomVector<long>(size, infimum(intMax), intMax);
     auto longList = makeList(longs, ", ");
 
     // Create a parser for a comma separated list of longs
@@ -80,7 +124,7 @@ TEST(Input, ListParser)
     ADAPTIV_ASSERT_ELEMENTS_EQ(longsParsed, longs);
 
     // Parse doubles -----------------------------------------------------------
-    auto doubles = randomVector<double>(size, doubleMin, doubleMax);
+    auto doubles = randomVector<double>(size, infimum(doubleMax), doubleMax);
     auto listWithSpaces = makeList(doubles, ", ");
     auto listWithTabs = makeList(doubles, "\t,\t");
 
@@ -159,7 +203,7 @@ TEST(Input, ArrayParser)
     ADAPTIV_ASSERT_ELEMENTS_EQ(ulongsParsed, ulongs);
 
     // Parse integers ----------------------------------------------------------
-    auto longs = randomVector<long>(size, intMin, intMax);
+    auto longs = randomVector<long>(size, infimum(intMax), intMax);
     auto longArray = makeArray(longs);
 
     // Create a parser for an array of integers
@@ -179,7 +223,7 @@ TEST(Input, ArrayParser)
     ADAPTIV_ASSERT_ELEMENTS_EQ(longsParsed, longs);
 
     // Parse doubles -----------------------------------------------------------
-    auto doubles = randomVector<double>(size, 0, 1e12);
+    auto doubles = randomVector<double>(size, infimum(doubleMax), doubleMax);
     auto doubleArray = makeArray(doubles);
 
     // Create a parser for an array of doubles
@@ -216,4 +260,52 @@ TEST(Input, ArrayParser)
 
     ASSERT_TRUE(noFailure);
     ADAPTIV_ASSERT_ELEMENTS_EQ(stringsParsed, strings);
+}
+
+// X3
+TEST(Input, X3)
+{
+    namespace x3 = boost::spirit::x3;
+    using x3::ascii::space;
+
+    // Parse doubles
+    auto doubles = randomVector<double>(size, infimum(doubleMax), doubleMax);
+    auto doubleList = makeList(doubles);
+
+//    std::string doubleList = "1, 2,";
+
+    iterator_type begin = doubleList.begin();
+    iterator_type end = doubleList.end();
+
+    // with directive to inject a reference to std::cerr in the error handler
+    using boost::spirit::x3::with;
+
+    // Tag to access get a reference to the actual x3::error_handler
+    using boost::spirit::x3::error_handler_tag;
+
+    using error_handler_type = boost::spirit::x3::error_handler<iterator_type>;
+
+    // The error handler
+    error_handler_type errorHandler(begin, end, std::cerr);
+
+    // The parser
+    auto const parser =
+    // we pass our error handler to the parser so we can access
+    // it later in our on_error and on_sucess handlers
+        with<error_handler_tag>(std::ref(errorHandler))
+            [
+                input::experimental::parsers::makeListParser<double>()
+            ];
+
+    std::vector<double> doublesParsed;
+    bool noFailure =
+        x3::phrase_parse(
+            doubleList.begin(),
+            doubleList.end(),
+            parser,
+            space,
+            doublesParsed);
+
+    ASSERT_TRUE(noFailure);
+    ADAPTIV_ASSERT_ELEMENTS_NEAR(doublesParsed, doubles, absError);
 }
