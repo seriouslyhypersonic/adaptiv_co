@@ -14,20 +14,23 @@ find_package(Threads REQUIRED)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(ADAPTIV_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-# Source and header files
-file(GLOB SRC_FILES ${SOURCE_DIR}/*.cpp)
+# Heade files
 file(GLOB HEADER_FILES ${ADAPTIV_INCLUDE_DIR}/adaptiv/*.hpp)
+
+# Source files
+file(GLOB SRC_FILES ${SOURCE_DIR}/*.cpp)
+file(GLOB SRC_FILES ${SOURCE_DIR}/input/*.cpp)
 
 # External libraries
 set(EXTERNAL_CEREAL_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/include/adaptiv/serialization/external)
 
-add_library(adaptivlib STATIC ${SRC_FILES} ${ADAPTIV_INCLUDE_DIRS})
+add_library(adaptiv STATIC ${SRC_FILES} ${ADAPTIV_INCLUDE_DIRS})
 
-target_include_directories(adaptivlib PUBLIC ${ADAPTIV_INCLUDE_DIRS}
+target_include_directories(adaptiv PUBLIC ${ADAPTIV_INCLUDE_DIRS}
             ${EXTERNAL_CEREAL_DIRS})
 
-target_link_libraries(adaptivlib
+target_link_libraries(adaptiv
         Threads::Threads
         ${Boost_LIBRARIES})
 

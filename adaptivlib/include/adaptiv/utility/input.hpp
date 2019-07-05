@@ -28,8 +28,7 @@
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
-
-namespace input {
+ADAPTIV_INPUT_NAMESPACE_BEGIN
 
 /**
  * @enum Describes the grammar used by the parser
@@ -275,8 +274,48 @@ public:
     }
 };
 
-} //namespace input
+// extern template for faster build times when using the LineParser -----------
 
+/// Helper alias maker
+#define ADAPTIV_MAKE_VECTOR_ALIAS(type, alias)   \
+    using alias##_vector_type = std::vector<type>\
+
+/// Helper extern template maker for LineParser::parse
+#define ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(AttributeType)                  \
+    extern template                                                        \
+    bool LineParser::parse(ParserType parserType, AttributeType& attribute)\
+
+/// Helper extern template maker for LineParser::doX3Parse
+#define ADAPTIV_MAKE_EXTERN_TEMPLATE_DOX3PARSE(AttributeType)              \
+    extern template                                                        \
+    bool LineParser::parse(ParserType parserType, AttributeType& attribute)\
+
+// List all parser attributes
+ADAPTIV_MAKE_VECTOR_ALIAS(             float, float);
+ADAPTIV_MAKE_VECTOR_ALIAS(            double, double);
+ADAPTIV_MAKE_VECTOR_ALIAS(             short, short);
+ADAPTIV_MAKE_VECTOR_ALIAS(    unsigned short, ushort);
+ADAPTIV_MAKE_VECTOR_ALIAS(      unsigned int, uint);
+ADAPTIV_MAKE_VECTOR_ALIAS(               int, int);
+ADAPTIV_MAKE_VECTOR_ALIAS(              long, long);
+ADAPTIV_MAKE_VECTOR_ALIAS(     unsigned long, ulong);
+ADAPTIV_MAKE_VECTOR_ALIAS(         long long, longlong);
+ADAPTIV_MAKE_VECTOR_ALIAS(unsigned long long, ulonglong);
+ADAPTIV_MAKE_VECTOR_ALIAS(       std::string, string);
+
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(float_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(double_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(short_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(uint_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(int_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(long_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(ulong_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(ulonglong_vector_type);
+ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(string_vector_type);
+
+
+
+ADAPTIV_INPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END
 ADAPTIV_NAMESPACE_END
 

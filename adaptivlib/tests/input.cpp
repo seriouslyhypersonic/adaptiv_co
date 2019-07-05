@@ -26,7 +26,7 @@ long long          const longlongMax  = std::numeric_limits<long long>::max();
 unsigned long long const ulonglongMax = std::numeric_limits<unsigned long long>::max();
 float              const absError     = 0.001;
 
-#define STRING_VECTOR                                         \
+#define DUMMY_STRING_VECTOR                                   \
 std::vector<std::string>{                                     \
     "Hello, world!",                                          \
     "Supercalifragilisticexpialidocious",                     \
@@ -39,13 +39,14 @@ std::vector<std::string>{                                     \
 
 using iterator_type = std::string::iterator;
 
+/// A test for the the list grammar (including missplaced tabs)
 #define ADAPTIV_MAKE_LIST_TEST(type, alias)                              \
-    bool alias##IsParsed = false;                                         \
+    bool alias##IsParsed = false;                                        \
     auto alias##s =                                                      \
         randomVector<type>(size, infimum(alias##Max), alias##Max);       \
-    auto alias##List = makeList(alias##s, ", ");                         \
+    auto alias##List = makeList(alias##s, ",\t");                        \
     auto const alias##Parser =                                           \
-        input::experimental::parsers::makeListParser<type, false>();     \
+        input::parsers::makeListParser<type, false>();                   \
     std::vector<type> alias##sParsed;                                    \
     alias##sParsed.reserve(size);                                        \
     alias##IsParsed = boost::spirit::x3::phrase_parse(                   \
@@ -62,7 +63,7 @@ using iterator_type = std::string::iterator;
     } do { break; } while (true)                                         \
                                                                          \
 
-/// Test the list grammar and all numeric x3_parsers
+/// Test the list grammar and all numeric parsers
 TEST(Input, X3ListParser)
 {
     ADAPTIV_MAKE_LIST_TEST(             float, float);
@@ -77,193 +78,39 @@ TEST(Input, X3ListParser)
     ADAPTIV_MAKE_LIST_TEST(unsigned long long, ulonglong);
 }
 
-/// Test the list grammar
-TEST(Input, ListParser)
+/// Test the array grammar and the quoted string parser
+TEST(Input, X3ArrayParser)
 {
-    bool noFailure = false; // Check parser components failure
+    bool isParsed = false;
+    std::vector<std::string> strings = {
+        "Hello, world!",
+        "Supercalifragilisticexpialidocious",
+        "A long time ago in a galaxy far, far away...",
+        "Lorem ipsum dolor sit amet, et ac aenean, enim integer.",
+        "Eu cupidatat nisl, integer non enim.",
+        "Ut ligula, at adipisci.",
+        "Sed purus, lorem varius."};
 
-    // Parse unsigned integers -------------------------------------------------
-    auto ulongs = randomVector<unsigned long>(size, 0, intMax);
-    auto ulongList = makeList(ulongs, ", ");
-
-    // Create a parser for a comma separated list of ulongs
-    input::ListParser<unsigned long, iterator_type> ulongListParser;
-
-    // Parse
-    std::vector<unsigned long> ulongsParsed; // For synthesized attributes
-    ulongsParsed.reserve(size);              // Performance optimization
-    noFailure = input::qi::phrase_parse(
-        ulongList.begin(),
-        ulongList.end(),
-        ulongListParser,
-        input::ascii::space,
-        ulongsParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_EQ(ulongsParsed, ulongs);
-
-    // Parse integers ----------------------------------------------------------
-    auto longs =
-        randomVector<long>(size, infimum(intMax), intMax);
-    auto longList = makeList(longs, ", ");
-
-    // Create a parser for a comma separated list of longs
-    input::ListParser<long, iterator_type> longListParser;
-
-    // Parse
-    std::vector<long> longsParsed;
-    longsParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        longList.begin(),
-        longList.end(),
-        longListParser,
-        input::ascii::space,
-        longsParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_EQ(longsParsed, longs);
-
-    // Parse doubles -----------------------------------------------------------
-    auto doubles = randomVector<double>(size, infimum(doubleMax), doubleMax);
-    auto listWithSpaces = makeList(doubles, ", ");
-    auto listWithTabs = makeList(doubles, "\t,\t");
-
-    // Create a parser for a comma separated list of doubles
-    input::ListParser<double, iterator_type> doubleListParser;
-
-    // Parse the list with spaces
-    std::vector<double> doublesParsed;
-    doublesParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        listWithSpaces.begin(),
-        listWithSpaces.end(),
-        doubleListParser,
-        input::ascii::space,
-        doublesParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_NEAR(doublesParsed, doubles, absError);
-
-    // Parse the list with tabs
-    doublesParsed.clear();
-    doublesParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        listWithTabs.begin(),
-        listWithTabs.end(),
-        doubleListParser,
-        input::ascii::space,
-        doublesParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_NEAR(doublesParsed, doubles, absError);
-
-    // Parse strings -----------------------------------------------------------
-    auto strings = STRING_VECTOR;
-    auto stringList = makeList(strings, ", ");
-
-    // Create a parser for a list of strings
-    input::ListParser<std::string, iterator_type> stringListParser;
-
-    std::vector<std::string> stringsParsed;
-    stringsParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        stringList.begin(),
-        stringList.end(),
-        stringListParser,
-        input::ascii::space,
-        stringsParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_EQ(stringsParsed, strings);
-}
-
-/// Test the array grammar
-TEST(Input, ArrayParser)
-{
-    bool noFailure = false; // Check parser components failure
-
-    // Parse unsigned integers -------------------------------------------------
-    auto ulongs = randomVector<unsigned long>(size, 0, intMax);
-    auto ulongArray = makeArray(ulongs);
-
-    // Create a parser for an array of unsigned integers
-    input::ArrayParser<unsigned long, iterator_type> ulongArrayParser;
-
-    // Parse array
-    std::vector<unsigned long> ulongsParsed;
-    ulongsParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        ulongArray.begin(),
-        ulongArray.end(),
-        ulongArrayParser,
-        input::ascii::space,
-        ulongsParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_EQ(ulongsParsed, ulongs);
-
-    // Parse integers ----------------------------------------------------------
-    auto longs = randomVector<long>(size, infimum(intMax), intMax);
-    auto longArray = makeArray(longs);
-
-    // Create a parser for an array of integers
-    input::ArrayParser<long, iterator_type> longArrayParser;
-
-    // Parse array
-    std::vector<long> longsParsed;
-    longsParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        longArray.begin(),
-        longArray.end(),
-        longArrayParser,
-        input::ascii::space,
-        longsParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_EQ(longsParsed, longs);
-
-    // Parse doubles -----------------------------------------------------------
-    auto doubles = randomVector<double>(size, infimum(doubleMax), doubleMax);
-    auto doubleArray = makeArray(doubles);
-
-    // Create a parser for an array of doubles
-    input::ArrayParser<double, iterator_type> doubleArrayParser;
-
-    // Parse array of numbers
-    std::vector<double> doublesParsed;
-    doublesParsed.reserve(size);
-    noFailure = input::qi::phrase_parse(
-        doubleArray.begin(),
-        doubleArray.end(),
-        doubleArrayParser,
-        input::ascii::space,
-        doublesParsed);
-
-    ASSERT_TRUE(noFailure);
-    ADAPTIV_ASSERT_ELEMENTS_NEAR(doublesParsed, doubles, absError);
-
-    // Parse strings -----------------------------------------------------------
-    auto strings = STRING_VECTOR;
     auto stringArray = makeArray(strings);
 
     // Create a parser for an array of strings
-    input::ArrayParser<std::string, iterator_type> stringArrayParser;
+    auto arrayParser = input::parsers::makeArrayParser<std::string, false>();
 
-    // Parse array of strings
+    // Parse the strings
     std::vector<std::string> stringsParsed;
-    noFailure = input::qi::phrase_parse(
+    isParsed = boost::spirit::x3::phrase_parse(
         stringArray.begin(),
         stringArray.end(),
-        stringArrayParser,
-        input::ascii::space,
+        arrayParser,
+        boost::spirit::x3::ascii::space,
         stringsParsed);
 
-    ASSERT_TRUE(noFailure);
+    ASSERT_TRUE(isParsed);
     ADAPTIV_ASSERT_ELEMENTS_EQ(stringsParsed, strings);
 }
 
 // X3
-TEST(Input, X3)
+TEST(Input, X3s)
 {
     namespace x3 = boost::spirit::x3;
     using x3::ascii::space;
@@ -294,7 +141,7 @@ TEST(Input, X3)
     // it later in our on_error and on_sucess handlers
         with<error_handler_tag>(std::ref(errorHandler))
             [
-                input::experimental::parsers::makeListParser<double>()
+                input::parsers::makeListParser<double>()
             ];
 
     std::vector<double> doublesParsed;

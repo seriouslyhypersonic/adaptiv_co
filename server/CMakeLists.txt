@@ -24,7 +24,7 @@ add_executable(server ${SRC_FILES} ${HEADER_FILES})
 target_include_directories(server PUBLIC ${INCLUDE_DIR})
 
 target_link_libraries(server
-        adaptivlib
+        adaptiv
         Threads::Threads
         boost_coroutine         # Seems to be required (gcc 7.4.0)
         ${Boost_LIBRARIES})
