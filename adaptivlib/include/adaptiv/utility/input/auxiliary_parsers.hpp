@@ -16,7 +16,8 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
 ADAPTIV_INPUT_NAMESPACE_BEGIN
 
-namespace x3_parsers {
+/// Auxiliary X3 parsers
+namespace parsers::auxiliary {
 
 namespace x3 = boost::spirit::x3;
 
@@ -24,7 +25,7 @@ namespace x3 = boost::spirit::x3;
 auto const eolist = x3::rule<class eolist_tag> {"missing ','"}
                   = x3::eoi;
 
-} // namespace x3_parsers
+} // namespace parsers::auxiliary
 
 ADAPTIV_INPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END

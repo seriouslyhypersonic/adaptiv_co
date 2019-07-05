@@ -16,7 +16,8 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
 ADAPTIV_INPUT_NAMESPACE_BEGIN
 
-namespace x3_parsers {
+/// Character (and string) X3 parsers
+namespace parsers::character {
 
 namespace x3 = boost::spirit::x3;
 
@@ -40,7 +41,7 @@ auto const cbracket = x3::rule<class cbracket_tag> {"missing ]"}
 auto const quotedString
     = x3::rule<class quotedString_tag, std::string> {"expecting quoted string"}
     = x3::lexeme[quotes > +(x3::char_ - quotes) > quotes];
-} // namespace x3_parsers
+} // namespace parsers::character
 
 ADAPTIV_INPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END

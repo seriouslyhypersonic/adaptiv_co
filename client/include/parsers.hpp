@@ -55,11 +55,11 @@ inline void parsers()
         isParsed ? print(ulongs) : parser.fail();
     } else if (command == "x3") {
         std::vector<unsigned int> uints;
-        isParsed = parser.parse(input::experimental::X3ParserType::List, uints);
+        isParsed = parser.parse(input::ParserType::List, uints);
         isParsed ? print(uints) : parser.fail();
     } else if (command == "x3a") {
         std::vector<std::string> strings;
-        isParsed = parser.parse(input::experimental::X3ParserType::Array, strings);
+        isParsed = parser.parse(input::ParserType::Array, strings);
         isParsed ? print(strings) : parser.fail();
     } else {
         std::cerr << "error: invalid command '" << command << "'\n";

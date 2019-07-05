@@ -16,24 +16,25 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
 ADAPTIV_INPUT_NAMESPACE_BEGIN
 
-namespace x3_parsers {
+/// Numeric X3 parsers
+namespace parsers::numeric {
 
 namespace x3 = boost::spirit::x3;
 
 /**
- * Map a specific numeric type to an X3 parser
+ * @brief Metafunction that maps a specific numeric type to an X3 parser
  * @tparam T The numeric type to associate with the X3 parser
  * @typedef \c attribute_type type alias for the corresponding X3
  * numeric parser attribute (i.e. type \c T)
  * @typedef \c tag type alias for the respective x3::rule tag
  * @static Member \c name for the x3::rule name
- * @static Member \c parser_def, i.e. the underlying x3 parser
+ * @static Member \c parser_def, i.e. the underlying X3 parser
  */
 template<class T>
-struct NumericParser { };
+struct get_numeric_parser { };
 
 template<>
-struct NumericParser<float>
+struct get_numeric_parser<float>
 {
     using attribute_type = float;
     using            tag = class float_tag;
@@ -43,7 +44,7 @@ struct NumericParser<float>
 };
 
 template<>
-struct NumericParser<double>
+struct get_numeric_parser<double>
 {
     using attribute_type = double;
     using            tag = class double_tag;
@@ -53,7 +54,7 @@ struct NumericParser<double>
 };
 
 template<>
-struct NumericParser<short>
+struct get_numeric_parser<short>
 {
     using attribute_type = ushort;
     using            tag = class short_tag;
@@ -63,7 +64,7 @@ struct NumericParser<short>
 };
 
 template<>
-struct NumericParser<unsigned short>
+struct get_numeric_parser<unsigned short>
 {
     using attribute_type = unsigned short;
     using            tag = class unsigned_short_tag;
@@ -73,7 +74,7 @@ struct NumericParser<unsigned short>
 };
 
 template<>
-struct NumericParser<int>
+struct get_numeric_parser<int>
 {
     using attribute_type = int;
     using            tag = class int_tag;
@@ -83,7 +84,7 @@ struct NumericParser<int>
 };
 
 template<>
-struct NumericParser<unsigned int>
+struct get_numeric_parser<unsigned int>
 {
     using attribute_type = unsigned int;
     using            tag = class uint_tag;
@@ -95,7 +96,7 @@ struct NumericParser<unsigned int>
 // No x3::uint_ parser
 
 template<>
-struct NumericParser<long>
+struct get_numeric_parser<long>
 {
     using attribute_type = long;
     using            tag = class long_tag;
@@ -105,7 +106,7 @@ struct NumericParser<long>
 };
 
 template<>
-struct NumericParser<unsigned long>
+struct get_numeric_parser<unsigned long>
 {
     using attribute_type = unsigned long;
     using            tag = class unsigned_long_tag;
@@ -115,7 +116,7 @@ struct NumericParser<unsigned long>
 };
 
 template<>
-struct NumericParser<long long>
+struct get_numeric_parser<long long>
 {
     using attribute_type = long long;
     using            tag = class long_long_tag;
@@ -125,7 +126,7 @@ struct NumericParser<long long>
 };
 
 template<>
-struct NumericParser<unsigned long long>
+struct get_numeric_parser<unsigned long long>
 {
     using attribute_type = unsigned long long;
     using            tag = class unsigned_long_long_tag;
@@ -134,7 +135,7 @@ struct NumericParser<unsigned long long>
     inline static x3::ulong_longtype parser = x3::ulong_long;
 };
 
-} // namespace x3_parsers
+} // namespace parsers::numeric
 
 ADAPTIV_INPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END
