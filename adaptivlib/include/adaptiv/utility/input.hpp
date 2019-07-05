@@ -285,11 +285,6 @@ public:
     extern template                                                        \
     bool LineParser::parse(ParserType parserType, AttributeType& attribute)\
 
-/// Helper extern template maker for LineParser::doX3Parse
-#define ADAPTIV_MAKE_EXTERN_TEMPLATE_DOX3PARSE(AttributeType)              \
-    extern template                                                        \
-    bool LineParser::parse(ParserType parserType, AttributeType& attribute)\
-
 // List all parser attributes
 ADAPTIV_MAKE_VECTOR_ALIAS(             float, float);
 ADAPTIV_MAKE_VECTOR_ALIAS(            double, double);
@@ -312,8 +307,6 @@ ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(long_vector_type);
 ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(ulong_vector_type);
 ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(ulonglong_vector_type);
 ADAPTIV_MAKE_EXTERN_TEMPLATE_PARSE(string_vector_type);
-
-
 
 ADAPTIV_INPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END
