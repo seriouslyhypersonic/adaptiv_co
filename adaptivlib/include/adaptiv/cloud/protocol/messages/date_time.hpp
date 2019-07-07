@@ -19,7 +19,7 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_CLOUD_NAMESPACE_BEGIN
 ADAPTIV_PROTOCOL_NAMESPACE_BEGIN
 
-namespace response {
+namespace responses {
 /// A date-time response
 struct DateTime
 {
@@ -29,7 +29,7 @@ struct DateTime
 
     ADAPTIV_SERIALIZE(date, time, error);
 };
-} // namespace request
+} // namespace responses
 
 ADAPTIV_PROTOCOL_NAMESPACE_END
 ADAPTIV_CLOUD_NAMESPACE_END
