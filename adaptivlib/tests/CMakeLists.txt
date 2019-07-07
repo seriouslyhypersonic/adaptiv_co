@@ -53,6 +53,6 @@ add_executable(adaptivlib_tests ${SRC_FILES} ${HEADER_FILES})
 target_include_directories(adaptivlib_tests PUBLIC ${INCLUDE_DIR})
 
 target_link_libraries(adaptivlib_tests
-        adaptivlib
+        adaptiv
         gtest
         gtest_main)

@@ -10,6 +10,7 @@
 void client::parsers()
 {
     namespace input = adaptiv::utility::input;
+    using input::ParserType;
 
     std::cout <<
               "   Test parsing:\n"
@@ -27,23 +28,23 @@ void client::parsers()
     bool isParsed = false;
     if (command == "dArray") {
         std::vector<double> doubles;
-        isParsed = parser.parse(input::ParserType::Array, doubles);
+        isParsed = parser.parse(ParserType::Array, doubles);
         isParsed? print(doubles) : parser.fail();
     } else if (command == "sArray") {
         std::vector<std::string> strings;
-        isParsed = parser.parse(input::ParserType::Array, strings);
+        isParsed = parser.parse(ParserType::Array, strings);
         isParsed? print(strings) : parser.fail();
     } else if (command == "uInt") {
         std::vector<unsigned long> ulongs;
-        isParsed = parser.parse(input::ParserType::List, ulongs);
+        isParsed = parser.parse(ParserType::List, ulongs);
         isParsed ? print(ulongs) : parser.fail();
     } else if (command == "x3") {
         std::vector<unsigned int> uints;
-        isParsed = parser.parse(input::ParserType::List, uints);
+        isParsed = parser.parse(ParserType::List, uints);
         isParsed ? print(uints) : parser.fail();
     } else if (command == "x3a") {
         std::vector<std::string> strings;
-        isParsed = parser.parse(input::ParserType::Array, strings);
+        isParsed = parser.parse(ParserType::Array, strings);
         isParsed ? print(strings) : parser.fail();
     } else {
         std::cerr << "error: invalid command '" << command << "'\n";
