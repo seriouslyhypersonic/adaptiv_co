@@ -18,7 +18,7 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_MATH_NAMESPACE_BEGIN
 
 template<class Arithmetic>
-Arithmetic random(Arithmetic min = 0, Arithmetic max = 1) noexcept(false)
+Arithmetic random(Arithmetic min = 0, Arithmetic max = 1)
 {
     static_assert(std::is_arithmetic_v<Arithmetic>,
             "[adaptiv::math::random] requires an arithmetic type");
