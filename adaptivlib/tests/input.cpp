@@ -26,17 +26,6 @@ long long          const longlongMax  = std::numeric_limits<long long>::max();
 unsigned long long const ulonglongMax = std::numeric_limits<unsigned long long>::max();
 float              const absError     = 0.001;
 
-#define DUMMY_STRING_VECTOR                                   \
-std::vector<std::string>{                                     \
-    "Hello, world!",                                          \
-    "Supercalifragilisticexpialidocious",                     \
-    "A long time ago in a galaxy far, far away...",           \
-    "Lorem ipsum dolor sit amet, et ac aenean, enim integer.",\
-    "Eu cupidatat nisl, integer non enim.",                   \
-    "Ut ligula, at adipisci.",                                \
-    "Sed purus, lorem varius."                                \
-}                                                             \
-
 using iterator_type = std::string::iterator;
 
 /// A test for the the list grammar (including missplaced tabs)
