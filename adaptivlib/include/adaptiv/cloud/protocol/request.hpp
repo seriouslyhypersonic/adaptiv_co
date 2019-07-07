@@ -18,8 +18,13 @@ ADAPTIV_PROTOCOL_NAMESPACE_BEGIN
  * An adaptiv client-server network Request
  * @tparam NetworkMessage A JSON serializable type holding the message to
  * exchange int the Request.
- * @note To ensure your NetworkMessage models the JSON serializable concept,
- * add serialization methods using one of cereal's facilities. E.g.
+ * @note To ensure your \c NetworkMessage models the JSON serializable concept,
+ * add serialization support with the helper macro
+ * @code
+ *      ADAPTIV_SERIALIZE(member1, member2, ...);
+ * @endcode
+ * or explicitly add serialization methods using one of cereal's
+ * facilities. E.g.
  * @code
  *     template<class Archive>
  *     void serialize(Archive& archive)
