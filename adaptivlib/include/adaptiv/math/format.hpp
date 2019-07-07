@@ -18,7 +18,7 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_MATH_NAMESPACE_BEGIN
 
 template<class T>
-std::string toScientific(T val, double precision = 6)
+std::string toScientific(T val, int precision = 6)
 {
     static_assert(std::is_arithmetic_v<T>, "not a numeric type");
     std::ostringstream scientific;
