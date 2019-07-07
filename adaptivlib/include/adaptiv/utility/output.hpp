@@ -78,19 +78,18 @@ constexpr StyleRule message {Font::Bold,    Fg::Blue,    Bg::Default};
 } // namespace style
 
 namespace detail {
-// Produce an ostream ref if T is an attribute (i.e. Font, Fg, or Bg)
+// Control overload resolution: T is an attribute (i.e. Font, Fg, or Bg)
 template<class T>
-using ostreamRefIfAtt = std::enable_if_t<std::is_same_v<T, Font> ||
-                                         std::is_same_v<T, Fg>   ||
-                                         std::is_same_v<T, Bg>
-                                        ,std::ostream&>;
+using EnableIfAttribute = std::enable_if_t<std::is_same_v<T, Font> ||
+                                           std::is_same_v<T, Fg>   ||
+                                           std::is_same_v<T, Bg>>;
 
 char const* const csi = "\033["; // control sequence introducer
 } // namespace external
 
 /// Overload of operator<< for attributes
-template<class T>
-detail::ostreamRefIfAtt<T> operator<<(std::ostream& out, T const& attribute)
+template<class T, class = detail::EnableIfAttribute<T>>
+std::ostream& operator<<(std::ostream& out, T const& attribute)
 {
     return out << detail::csi << static_cast<int>(attribute) << 'm';
 }
