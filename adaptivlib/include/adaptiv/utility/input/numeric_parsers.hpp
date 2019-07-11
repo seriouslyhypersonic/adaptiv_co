@@ -56,7 +56,7 @@ struct get_numeric_parser<double>
 template<>
 struct get_numeric_parser<short>
 {
-    using attribute_type = ushort;
+    using attribute_type = short;
     using            tag = class short_tag;
 
     inline static char const*    name   = "expecting short";

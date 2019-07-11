@@ -10,13 +10,14 @@
 
 #include <iostream>
 #include <type_traits>
+#include <stdexcept>
 
 #include <adaptiv/macros.hpp>
+#include <adaptiv/utility/output/platform_console.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
-
-namespace output {
+ADAPTIV_OUTPUT_NAMESPACE_BEGIN
 
 /// Attribute "Font": a display effect or font style
 enum class Font
@@ -83,28 +84,31 @@ template<class T>
 using EnableIfAttribute = std::enable_if_t<std::is_same_v<T, Font> ||
                                            std::is_same_v<T, Fg>   ||
                                            std::is_same_v<T, Bg>>;
-
-char const* const csi = "\033["; // control sequence introducer
-} // namespace external
+} // namespace detail
 
 /// Overload of operator<< for attributes
 template<class T, class = detail::EnableIfAttribute<T>>
 std::ostream& operator<<(std::ostream& out, T const& attribute)
 {
-    return out << detail::csi << static_cast<int>(attribute) << 'm';
+    if (platform::hasOutputSequenceSupport) {
+        out << platform::csi << static_cast<int>(attribute) << 'm';
+    }
+    return out;
 }
 
 /// Overload of operator<< for a StyleRule
 inline std::ostream& operator<<(std::ostream& out, StyleRule const& rule)
 {
-    return out << detail::csi <<
-        static_cast<int>(rule.font) << ';' <<
-        static_cast<int>(rule.fg)   << ';' <<
-        static_cast<int>(rule.bg)   << 'm';
+    if (platform::hasOutputSequenceSupport) {
+        out << platform::csi <<
+            static_cast<int>(rule.font) << ';' <<
+            static_cast<int>(rule.fg)   << ';' <<
+            static_cast<int>(rule.bg)   << 'm';
+    }
+    return out;
 }
 
-} // namespace output
-
+ADAPTIV_OUTPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END
 ADAPTIV_NAMESPACE_END
 

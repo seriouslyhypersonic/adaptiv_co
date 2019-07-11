@@ -8,6 +8,15 @@
 #ifndef ADAPTIV_MACROS_HPP
 #define ADAPTIV_MACROS_HPP
 
+// [platform] ------------------------------------------------------------------
+#ifdef __linux__
+    #define ADAPTIV_LINUX
+#elif defined(__APPLE__) || defined(__MACH__)
+    #define ADAPTIV_MAC
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32) || defined(_WIN64)
+    #define ADAPTIV_WINDOWS
+#endif
+
 // [namespaces] ----------------------------------------------------------------
 
 #define ADAPTIV_NAMESPACE_BEGIN namespace adaptiv {
@@ -39,6 +48,9 @@
 
 #define ADAPTIV_INPUT_NAMESPACE_BEGIN namespace input {
 #define ADAPTIV_INPUT_NAMESPACE_END }
+
+#define ADAPTIV_OUTPUT_NAMESPACE_BEGIN namespace output {
+#define ADAPTIV_OUTPUT_NAMESPACE_END }
 
 #define ADAPTIV_TRAITS_NAMESPACE_BEGIN namespace traits {
 #define ADAPTIV_TRAITS_NAMESPACE_END }

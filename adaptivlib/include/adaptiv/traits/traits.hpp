@@ -9,62 +9,13 @@
 #define ADAPTIV_TRAITS_HPP
 
 #include <type_traits>
-#include <experimental/type_traits>
 #include <string>
 
 #include <adaptiv/macros.hpp>
+#include <adaptiv/traits/detection_idiom.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_TRAITS_NAMESPACE_BEGIN
-
-// [detection idiom] ----------------------------------------------------- begin
-
-/// Alias for true_type if Op<Args...> is valid. Otherwise alias for false_type.
-template<template<class...> class Op, class... Args>
-using is_detected = std::experimental::is_detected<Op, Args...>;
-
-/**
- * Alias for Op<Args...> if it is well formed. Otherwise nonesuch.
- * @note Can be used for dependent lookups
- */
-template<template<class...> class Op, class... Args>
-using detected_t = std::experimental::detected_t<Op, Args...>;
-
-/**
-* Alias for a struct with two member typedefs.
-* @typedef \c type Alias for Op<Args...> if it denotes a valid type. Otherwise
-*  alias for Default.
-* \@ypedef \c value_t equivalent to \c is_detected
-*/
-template< class Default, template<class...> class Op, class... Args>
-using detected_or = std::experimental::detected_or<Default, Op, Args...>;
-
-/// Non instantiatable type to indicate detection failure
-using nonesuch = std::experimental::nonesuch;
-
-template<template<class...> class Op, class... Args>
-constexpr bool is_detected_v = std::experimental::is_detected_v<Op, Args...>;
-
-template<class Default, template<class...> class Op, class... Args >
-using detected_or_t = std::experimental::detected_or_t<Default, Op, Args...>;
-
-template <class Expected, template<class...> class Op, class... Args>
-using is_detected_exact =
-std::experimental::is_detected_exact<Expected, Op, Args...>;
-
-template <class Expected, template<class...> class Op, class... Args>
-constexpr bool is_detected_exact_v =
-               std::experimental::is_detected_exact_v<Expected, Op, Args...>;
-
-template <class To, template<class...> class Op, class... Args>
-using is_detected_convertible =
-std::experimental::is_detected_convertible<To, Op, Args...>;
-
-template <class To, template<class...> class Op, class... Args>
-constexpr bool is_detected_convertible_v =
-               std::experimental::is_detected_convertible_v<To, Op, Args...>;
-
-// [detection idiom] ------------------------------------------------------- end
 
 // traits::is_specialization ---------------------------------------------------
 
