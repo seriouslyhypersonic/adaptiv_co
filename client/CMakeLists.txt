@@ -36,7 +36,3 @@ target_link_libraries(client
         Threads::Threads
         #boost_coroutine         # Seems to be required (gcc 7.4.0)
         ${Boost_LIBRARIES})
-
-if(MINGW)
-    target_link_libraries(client ws2_32)
-endif()
