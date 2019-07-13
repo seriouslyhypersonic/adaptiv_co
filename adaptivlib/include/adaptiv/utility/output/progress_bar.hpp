@@ -30,7 +30,8 @@ class ProgressBar
     std::size_t consoleWidth_;
     std::size_t oldConsoleWidth_;
 
-    static std::size_t const legendLength_;
+    inline static std::size_t const legendLength_ =
+        sizeof("[] XXX%") - 1; // Do not count null-terminator
 
     std::size_t consoleWidth()
     {
@@ -105,9 +106,6 @@ public:
         std::cout.flush();
     }
 };
-
-inline std::size_t const ProgressBar::legendLength_ =
-    sizeof("[] XXX%") - 1; // Do not count null-terminator
 
 ADAPTIV_OUTPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END

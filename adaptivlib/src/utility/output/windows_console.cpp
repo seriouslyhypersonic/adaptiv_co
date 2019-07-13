@@ -64,3 +64,15 @@ bool adaptiv::utility::output::windows::enableOutputSequences()
 
     return true;
 }
+
+std::size_t adaptiv::utility::output::windows::consoleWidth()
+{
+    static std::size_t const failure = 0;
+
+    CONSOLE_SCREEN_BUFFER_INFO window;
+    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &window)) {
+        return window.srWindow.Right - window.srWindow.Left + 1;
+    }
+
+    return false;
+}

@@ -24,6 +24,11 @@ char const* const csi = "\x1b["; // windows control sequence introducer
  */
 bool enableOutputSequences();
 
+/**
+ * Windows console width
+ * @return The console width in characters or 0 if unable to determine the width
+ */
+std::size_t consoleWidth();
 } // namespace windows
 
 ADAPTIV_OUTPUT_NAMESPACE_END

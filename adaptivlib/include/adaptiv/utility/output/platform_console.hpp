@@ -24,6 +24,15 @@ namespace platform {
 #ifdef ADAPTIV_WINDOWS
 char const* const csi = windows::csi; // control sequence introducer
 bool const hasOutputSequenceSupport = windows::enableOutputSequences();
+
+/**
+ * Determine the console width
+ * @return The console width in characters or 0 if unable to determine the width
+ */
+inline std::size_t consoleWidth()
+{
+    return windows::consoleWidth();
+}
 #elif defined(ADAPTIV_POSIX)
 char const* const csi = posix::csi; // control sequence introducer
 const bool hasOutputSequenceSupport = true; // todo: actually check for support
