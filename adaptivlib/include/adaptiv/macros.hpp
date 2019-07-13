@@ -10,11 +10,15 @@
 
 // [platform] ------------------------------------------------------------------
 #ifdef __linux__
-    #define ADAPTIV_LINUX
+    #define ADAPTIV_LINUX   /// On a Linux platform
 #elif defined(__APPLE__) || defined(__MACH__)
-    #define ADAPTIV_MAC
+    #define ADAPTIV_MAC /// On a Mac platform
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32) || defined(_WIN64)
-    #define ADAPTIV_WINDOWS
+    #define ADAPTIV_WINDOWS  /// On a Windows platform
+#endif
+
+#if defined(ADAPTIV_LINUX) || defined(ADAPTIV_MAC)
+    #define ADAPTIV_POSIX // On POSIX platform
 #endif
 
 // [namespaces] ----------------------------------------------------------------

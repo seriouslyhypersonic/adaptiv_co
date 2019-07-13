@@ -24,18 +24,27 @@ set(ADAPTIV_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 # Header files
 file(GLOB HEADER_FILES ${ADAPTIV_INCLUDE_DIR}/adaptiv/*.hpp)
 
-# Source files (cross-platform)
+# Source files (import only cross-platform)
 file(GLOB_RECURSE SRC_FILES ${SOURCE_DIR}/*.cpp/)
 list(FILTER SRC_FILES EXCLUDE REGEX "windows*")
 list(FILTER SRC_FILES EXCLUDE REGEX "linux*")
 list(FILTER SRC_FILES EXCLUDE REGEX "mac*")
+list(FILTER SRC_FILES EXCLUDE REGEX "posix*")
 
 # Source files (platform-specific)
 # todo: test this on windows
-if (MSVC)
+if(UNIX AND NOT APPLE)
+    file(GLOB_RECURSE LINUX_SRC_FILES ${SOURCE_DIR}/linux*.cpp/)
+    file(GLOB_RECURSE POSIX_SRC_FILES ${SOURCE_DIR}/posix*.cpp/)
+    list(APPEND SRC_FILES ${LINUX_SRC_FILES} ${POSIX_SRC_FILES})
+elseif(APPLE)
+    file(GLOB_RECURSE MAC_SRC_FILES ${SOURCE_DIR}/mac*.cpp/)
+    file(GLOB_RECURSE POSIX_SRC_FILES ${SOURCE_DIR}/posix*.cpp/)
+    list(APPEND SRC_FILES ${MAC_SRC_FILES} ${POSIX_SRC_FILES})
+elseif (WIN32)
     file(GLOB_RECURSE WIN_SRC_FILES ${SOURCE_DIR}/windows*.cpp/)
     list(APPEND SRC_FILES ${WIN_SRC_FILES})
-endif ()
+endif()
 
 # External libraries
 set(EXTERNAL_CEREAL_DIRS

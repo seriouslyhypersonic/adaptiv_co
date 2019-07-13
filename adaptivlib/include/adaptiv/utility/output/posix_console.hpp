@@ -14,9 +14,9 @@ ADAPTIV_NAMESPACE_BEGIN
 ADAPTIV_UTILITY_NAMESPACE_BEGIN
 ADAPTIV_OUTPUT_NAMESPACE_BEGIN
 
-namespace linux_mac {
+namespace posix {
 char const* const csi = "\033["; // unix control sequence introducer
-} // namespace linux_mac
+} // namespace posix
 
 ADAPTIV_OUTPUT_NAMESPACE_END
 ADAPTIV_UTILITY_NAMESPACE_END

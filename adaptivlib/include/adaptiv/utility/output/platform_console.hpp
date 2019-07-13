@@ -12,8 +12,8 @@
 
 #ifdef ADAPTIV_WINDOWS
 #include <adaptiv/utility/output/windows_console.hpp>
-#else
-#include <adaptiv/utility/output/linux_mac_console.hpp>
+#elif defined(ADAPTIV_POSIX)
+#include <adaptiv/utility/output/posix_console.hpp>
 #endif
 
 ADAPTIV_NAMESPACE_BEGIN
@@ -24,8 +24,8 @@ namespace platform {
 #ifdef ADAPTIV_WINDOWS
 char const* const csi = windows::csi; // control sequence introducer
 bool const hasOutputSequenceSupport = windows::enableOutputSequences();
-#else
-char const* const csi = linux_mac::csi; // control sequence introducer
+#elif defined(ADAPTIV_POSIX)
+char const* const csi = posix::csi; // control sequence introducer
 const bool hasOutputSequenceSupport = true; // todo: actually check for support
 #endif
 } // namespace platform
