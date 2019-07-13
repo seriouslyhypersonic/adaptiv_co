@@ -61,4 +61,4 @@ target_link_libraries(adaptiv
         Threads::Threads
         ${Boost_LIBRARIES})
 
-add_subdirectory(tests)
+#add_subdirectory(tests)

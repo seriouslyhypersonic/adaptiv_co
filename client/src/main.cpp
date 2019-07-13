@@ -56,6 +56,8 @@ int main(int argc, char** argv)
             client::parsers();
         } else if (command == "details") {
             client::details(host, port);
+        } else if (command == "progress") {
+            client::progress();
         } else if (command == "exit") {
             break;
         } else {

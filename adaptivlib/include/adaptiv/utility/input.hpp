@@ -17,7 +17,7 @@
 
 #include <adaptiv/macros.hpp>
 #include <adaptiv/traits/traits.hpp>
-#include <adaptiv/utility/output.hpp>
+#include <adaptiv/utility/output/styles.hpp>
 #include <adaptiv/system/system.hpp>
 #include <adaptiv/utility/input/parsers.hpp>
 

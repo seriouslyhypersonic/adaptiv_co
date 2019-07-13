@@ -13,7 +13,7 @@
 #include <string>
 
 #include <adaptiv/macros.hpp>
-#include <adaptiv/utility/output.hpp>
+#include <adaptiv/utility/output/styles.hpp>
 
 #include <boost/system/system_error.hpp>
 

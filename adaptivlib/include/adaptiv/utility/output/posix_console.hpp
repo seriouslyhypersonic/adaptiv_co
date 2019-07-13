@@ -8,6 +8,8 @@
 #ifndef ADAPTIV_LINUX_MAC_CONSOLE_HPP
 #define ADAPTIV_LINUX_MAC_CONSOLE_HPP
 
+#include <cstddef>
+
 #include <adaptiv/macros.hpp>
 
 ADAPTIV_NAMESPACE_BEGIN
@@ -16,6 +18,12 @@ ADAPTIV_OUTPUT_NAMESPACE_BEGIN
 
 namespace posix {
 char const* const csi = "\033["; // unix control sequence introducer
+
+/**
+ * Posix console width
+ * @return The console width in characters or 0 if unable to determine the width
+ */
+std::size_t consoleWidth();
 } // namespace posix
 
 ADAPTIV_OUTPUT_NAMESPACE_END

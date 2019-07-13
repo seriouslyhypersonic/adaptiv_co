@@ -30,9 +30,10 @@ add_executable(client ${SRC_FILES} ${HEADER_FILES})
 
 target_include_directories(client PUBLIC ${INCLUDE_DIR})
 
+# Link libraries
 target_link_directories(client PUBLIC ${Boost_LIBRARY_DIRS})
-target_link_libraries(client
-        adaptiv
-        Threads::Threads
-        #boost_coroutine         # Seems to be required (gcc 7.4.0)
-        ${Boost_LIBRARIES})
+set(LINK_LIBS adaptiv Threads::Threads ${Boost_LIBRARIES})
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    list(APPEND LINK_LIBS boost_coroutine)  #Seems to be required (gcc 7.4.0)
+endif ()
+target_link_libraries(client ${LINK_LIBS})

@@ -14,6 +14,9 @@
 #include <locale>
 #include <ctime>
 
+#include <thread>
+#include <chrono>
+
 #include <adaptiv/utility/output.hpp>
 
 namespace client {
@@ -66,6 +69,21 @@ inline void details(char const* host, char const* port)
     std::cout <<
               "connect to: " << host << '\n' <<
               "      port: " << port << '\n';
+}
+
+/// Display a progress bar
+inline void progress()
+{
+    namespace output = adaptiv::utility::output;
+
+    output::ProgressBar bar;
+
+    int max = 500;
+    for (int i = 0; i <= max; ++i) {
+        bar.update(static_cast<double>(i)/max);
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
+    }
+    bar.clear();
 }
 
 } // namespace client
