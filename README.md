@@ -2,6 +2,8 @@
     <img src="./doc/adaptiv_logo.png" alt = "adaptiv logo" height="150">
 </p>
 
+[![Language](https://img.shields.io/badge/C++-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17) &nbsp;
+[![Boost](https://img.shields.io/badge/boost-1.70-blue.svg)](https://www.boost.org/users/history/version_1_70_0.html)
 
 ## Instructions
 
